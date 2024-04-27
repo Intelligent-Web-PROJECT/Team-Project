@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const {User} = require('./schema/user')
+const {Plant} = require('./schema/plant')
 
 const MONGO_HOST = process.env.MONGO_HOST || 'localhost'
 const MONGO_USER = process.env.MONGO_USER || 'admin'
@@ -15,15 +16,15 @@ let connected = false
 
 
 const connectToDB = async () => {
-    await mongoose.connect(connectionString)
-
-    const db = mongoose.connection
-
-    db.on('error', (error) => console.error(error))
-    db.once('open', async() => {
-        console.log(`Connected to ${MONGO_CONNAME}`)
-        connected = true
-    })
+    try {
+        await mongoose.connect(connectionString)
+            .then(() => {
+                console.log(`connected to the ${MONGO_CONNAME}`)
+            })
+    } catch (error) {
+        console.error('Failed to connect to MongoDB:', error)
+        // Handle error (e.g., retry, log, notify)
+    }
 }
 
 if (process.env.ENVIRONMENT !== 'test') {
@@ -32,5 +33,6 @@ if (process.env.ENVIRONMENT !== 'test') {
 
 module.exports = {
     User,
+    Plant,
     connected
 }
