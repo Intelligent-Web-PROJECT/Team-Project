@@ -4,8 +4,19 @@
  * Module dependencies.
  */
 
+const dotenv = require('dotenv')
+const parse = require('dotenv-parse-variables')
+
 var app = require('../app');
 var debug = require('debug')('solutions:server');
+
+let env = dotenv.config({path: './.env'})
+if(env.error) {
+  throw env.error
+}
+env = parse(env, {assignToProcessEnv: true, overrideProcessEnv: true})
+
+
 var http = require('http');
 
 /**
@@ -87,4 +98,6 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+
+  console.log('Server is running on: http://localhost:' + addr.port)
 }
