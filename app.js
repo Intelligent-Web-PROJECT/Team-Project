@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouters = require('./routes/authRoutes');
 const {sessionSetup, passportStrategy, passportSerializeUser, passportDeserializeUser, sessionErrorHandler} = require("./auth/passportAuth");
+const {isAuthenticated, authInfo} = require("./middlewares/auth");
 
 var app = express();
 
@@ -44,9 +45,9 @@ passport.use(passportStrategy)
 passport.serializeUser(passportSerializeUser)
 passport.deserializeUser(passportDeserializeUser)
 
-app.use('/', indexRouter);
-app.use('/', usersRouter);
-app.use('/', authRouters);
+app.use('/', authInfo, indexRouter);
+app.use('/', isAuthenticated, usersRouter);
+app.use('/', isAuthenticated, authRouters);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

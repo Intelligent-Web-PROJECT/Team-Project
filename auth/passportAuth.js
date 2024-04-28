@@ -31,7 +31,6 @@ const passportStrategy = new LocalStrategy({
                     // Passes error to the session error handler
                     return callback(null, false, {message: 'Incorrect email or password.'});
                 }
-
                 return callback(null, user);
             });
         } catch (err) {
