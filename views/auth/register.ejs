@@ -1,12 +1,23 @@
 
 <%- include("../components/header") %>
 
+<% if (hasMessages) { %>
+    <section>
+        <ol class="mb-0 list-group list-group-numbered m-1">
+            <% messages.forEach(function(message) { %>
+                <li class="border border-danger border-1 bg-danger-subtle pt-2 pb-2 rounded-1 mb-1 list-group-item"><%= message %></li>
+            <% }); %>
+        </ol>
+
+    </section>
+<% } %>
+
 <!-- Section: Design Block -->
 <div class="d-flex justify-content-center align-items-center mt-5 mb-4">
     <!-- Jumbotron -->
     <div class="px-4 py-5 px-md-5 text-center text-lg-start shadow-lg mx-2 my-2 rounded bg-success-subtle" style="background-color: rgba(255, 255, 255, 0.5);">
         <div class="container h-100">
-            <div class="row gx-lg-5 mt-5">
+            <div class="row gx-lg-5">
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <h1 class="my-5 display-3 fw-bold ls-tight">
                         <img src="">
@@ -20,32 +31,32 @@
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="card">
                         <div class="card-body py-5 px-md-5 rounded" style="background-color: #acd1c0">
-                            <form>
+                            <form method="POST" action="/register" id="form" onsubmit="return validatePasswordMatch()">
                                 <!-- Username input -->
                                 <div data-mdb-input-init class="form-outline mb-4">
                                     <label class="form-label mb-1" for="username">Username</label>
-                                    <input type="text" id="username" name="username" class="form-control" />
+                                    <input type="text" id="username" name="username" class="form-control" required/>
 
                                 </div>
 
                                 <!-- Email input -->
                                 <div data-mdb-input-init class="form-outline mb-4">
                                     <label class="form-label mb-1" for="email">Email address</label>
-                                    <input type="email" id="email" name="email" class="form-control" />
+                                    <input type="email" id="email" name="email" class="form-control" required />
 
                                 </div>
 
                                 <!-- Password input -->
                                 <div data-mdb-input-init class="form-outline mb-4">
                                     <label class="form-label mb-1" for="password">Password</label>
-                                    <input type="password" id="password" name="password" class="form-control" />
+                                    <input type="password" id="password" name="password" class="form-control" required/>
 
                                 </div>
 
                                 <!-- Confirm Password input -->
                                 <div data-mdb-input-init class="form-outline mb-4">
                                     <label class="form-label mb-1" for="confirmPassword">Confirm Password</label>
-                                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" />
+                                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required/>
 
                                 </div>
 
@@ -69,5 +80,19 @@
     </div>
     <!-- Jumbotron -->
 </div>
+
+<script>
+    function validatePasswordMatch() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (password !== confirmPassword) {
+            alert('Passwords do not match');
+            return false; // Prevent form submission
+        }
+
+        return true; // Allow form submission
+    }
+</script>
 
 <!-- Section: Design Block -->
