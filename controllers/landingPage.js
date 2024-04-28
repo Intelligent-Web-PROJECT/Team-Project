@@ -2,7 +2,7 @@ const {insertUser} = require("../models/mongodb");
 
 
 async function getLandingPage(req, res) {
-    res.render('index', {title: 'FloraScan'})
+    res.render('index', {title: 'FloraScan', auth: req.isLoggedIn, user: req.user})
 }
 
 async function getWelcomePage(req, res) {
