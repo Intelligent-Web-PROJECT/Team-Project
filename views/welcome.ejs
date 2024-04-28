@@ -5,6 +5,10 @@
 <div class="p-5">
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+    <% if (auth === true){ %>
     <%= user.username%>
+    <%} else {%>
+        <p>You are not logged in</p>
+    <%}%>
     <a href="/list-plant" class="btn btn-success">Add plant</a>
 </div>

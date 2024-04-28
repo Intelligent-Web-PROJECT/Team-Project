@@ -241,6 +241,4 @@ module.exports = {
     getResetPasswordPage,
     resetPassword
 
-
-
 }
