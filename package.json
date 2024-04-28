@@ -7,6 +7,7 @@
     "dev": "nodemon -e js -i 'views/*' -i public/* ./bin/www"
   },
   "dependencies": {
+    "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^5.1.0",

@@ -3,5 +3,9 @@
 <div class="p-5">
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+    <% if (auth === true){ %>
     <%= user.username%>
+    <%} else {%>
+    <p>You are not logged in</p>
+    <%}%>
 </div>

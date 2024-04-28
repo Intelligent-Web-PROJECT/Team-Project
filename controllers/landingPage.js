@@ -1,8 +1,11 @@
 const {insertUser} = require("../models/mongodb");
+const {getLocation} = require("../public/javascripts/location");
 
 
 async function getLandingPage(req, res) {
-    res.render('index', {title: 'FloraScan'})
+    //Sample usage for location. Everytime you create an instance, it'll read the current fetched location.
+    const location = await getLocation()
+    res.render('index', {title: 'FloraScan', city: location.region})
 }
 
 async function getWelcomePage(req, res) {
