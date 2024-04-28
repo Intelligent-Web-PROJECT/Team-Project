@@ -1,0 +1,33 @@
+<%- include("../components/header") %>
+<%- include("../components/navbar") %>
+
+<div class="container-fluid list-item">
+    <h3 class="text-muted fs-4">Add plant</h3>
+    <form>
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name">
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="height" class="form-label">Plant Height</label>
+            <input type="text" class="form-control" id="height">
+        </div>
+        <div class="mb-3">
+            <label for="spread" class="form-label">Plant Spread</label>
+            <input type="text" class="form-control" id="height">
+        </div>
+        <div class="mb-3">
+            <h3 class="text-muted">Characteristics:</h3>
+            <div class="mb-3">
+                <label for="spread" class="form-label">Plant Spread</label>
+                <input type="text" class="form-control" id="height">
+            </div>
+
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
