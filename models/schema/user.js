@@ -10,8 +10,22 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     password: {
-        type: String,
+        type: Buffer,
         required: true
+    },
+    salt:{
+        type: Buffer,
+        required: true
+    },
+    email_verified:{
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    token:{
+        type: String,
+        default: null,
+        required: false
     }
 }, {timestamps: true})
 

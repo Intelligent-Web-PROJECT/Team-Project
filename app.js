@@ -3,9 +3,13 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const passport = require("passport")
+const flash = require('express-flash');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var authRouters = require('./routes/authRoutes');
+const {sessionSetup, passportStrategy, passportSerializeUser, passportDeserializeUser, sessionErrorHandler} = require("./auth/passportAuth");
 
 var app = express();
 
@@ -20,14 +24,29 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+
+
 /* Static files */
 app.use("/stylesheets", express.static(path.join(__dirname, "node_modules/bootstrap/dist/css")))
 app.use("/javascripts", express.static(path.join(__dirname, "node_modules/bootstrap/dist/js")))
 app.use("/javascripts", express.static(path.join(__dirname, "node_modules/jquery/dist")))
 
 
+app.use(sessionSetup);
+app.use(passport.authenticate('session'))
+/* Session Error Handler */
+app.use(sessionErrorHandler);
+
+app.use(flash())
+
+/* Passport setup */
+passport.use(passportStrategy)
+passport.serializeUser(passportSerializeUser)
+passport.deserializeUser(passportDeserializeUser)
+
 app.use('/', indexRouter);
 app.use('/', usersRouter);
+app.use('/', authRouters);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

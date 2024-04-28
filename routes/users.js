@@ -4,7 +4,5 @@ const {getLoginPage, getRegisterPage} = require("../controllers/auth/authControl
 var router = express.Router();
 
 /* GET users listing. */
-router.get('/login', getLoginPage)
-router.get('/register', getRegisterPage)
 
 module.exports = router;

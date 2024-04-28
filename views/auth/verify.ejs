@@ -1,0 +1,20 @@
+<%- include("../components/header") %>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h1><i class="fas fa-envelope-open-text text-success"></i> Email Verified</h1>
+            <div class="w-75 py-5 text-center mx-auto"> <!-- Added mx-auto here -->
+                <p>Redirecting to Login page in 5 seconds. If not redirected, please click
+                    <a href="/login">here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Set a timeout to redirect to /login after 5 seconds (5000 milliseconds)
+    setTimeout(function() {
+        window.location.href = '/login';
+    }, 5000);
+</script>
