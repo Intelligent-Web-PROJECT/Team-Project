@@ -47,7 +47,7 @@ passport.deserializeUser(passportDeserializeUser)
 
 app.use('/', authInfo, indexRouter);
 app.use('/', isAuthenticated, usersRouter);
-app.use('/', isAuthenticated, authRouters);
+app.use('/', authRouters);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
