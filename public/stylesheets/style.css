@@ -37,3 +37,11 @@ a:hover{
   background-color: transparent;
   border: none;
 }
+
+.nav-bg {
+  background-color: #DCE1DE;
+  color: #198754;
+}
+.nav-link {
+  color: #198754;
+}

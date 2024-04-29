@@ -1,9 +1,15 @@
 <%- include("../components/header") %>
 <%- include("../components/navbar") %>
 
-<div class="container-fluid list-item">
+<div class="container-fluid list-item p-2">
     <h3 class="text-muted fs-4">Add plant</h3>
     <form>
+        <div class="mb-3">
+            <label class="form-label">Upload Images</label>
+            <button class="btn btn-primary">Upload</button>
+            <button class="btn btn-Success">Click a picture</button>
+            <input type="file" id="imageUpload" name="imageUpload" accept="image/*">
+        </div>
         <div class="mb-3">
             <label for="name" class="form-label">Name</label>
             <input type="text" class="form-control" id="name">
@@ -18,13 +24,59 @@
         </div>
         <div class="mb-3">
             <label for="spread" class="form-label">Plant Spread</label>
-            <input type="text" class="form-control" id="height">
+            <input type="text" class="form-control" id="spread">
         </div>
         <div class="mb-3">
             <h3 class="text-muted">Characteristics:</h3>
             <div class="mb-3">
-                <label for="spread" class="form-label">Plant Spread</label>
-                <input type="text" class="form-control" id="height">
+                <label for="spread" class="form-label">Does the plant have flowers?</label>
+                <div class="btn-group">
+                    <input type="radio" class="btn-check" name="options" id="flowerYes" autocomplete="off" checked />
+                    <label class="btn btn-secondary" for="flowerYes" data-mdb-ripple-init>Yes</label>
+
+                    <input type="radio" class="btn-check" name="options" id="flowerNo" autocomplete="off" />
+                    <label class="btn btn-secondary" for="flowerNo" data-mdb-ripple-init>No</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="spread" class="form-label">Does the plant have leaves?</label>
+                <div class="btn-group">
+                    <input type="radio" class="btn-check" name="options" id="leavesYes" autocomplete="off" checked />
+                    <label class="btn btn-secondary" for="leavesYes" data-mdb-ripple-init>Yes</label>
+
+                    <input type="radio" class="btn-check" name="options" id="leavesNo" autocomplete="off" />
+                    <label class="btn btn-secondary" for="leavesNo" data-mdb-ripple-init>No</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="spread" class="form-label">Does the plant have fruits or seeds?</label>
+                <div class="btn-group">
+                    <input type="radio" class="btn-check" name="options" id="fruitsYes" autocomplete="off" checked />
+                    <label class="btn btn-secondary" for="fruitsYes" data-mdb-ripple-init>Yes</label>
+
+                    <input type="radio" class="btn-check" name="options" id="fruitsNo" autocomplete="off" />
+                    <label class="btn btn-secondary" for="fruitsNo" data-mdb-ripple-init>No</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="spread" class="form-label">What is the sun exposure in that area?</label>
+                <div class="btn-group">
+                    <input type="radio" class="btn-check" name="options" id="sunFull" autocomplete="off" checked />
+                    <label class="btn btn-secondary" for="sunFull" data-mdb-ripple-init>Full sun</label>
+
+                    <input type="radio" class="btn-check" name="options" id="sunPartial" autocomplete="off" />
+                    <label class="btn btn-secondary" for="sunPartial" data-mdb-ripple-init>Partial Shade</label>
+
+                    <input type="radio" class="btn-check" name="options" id="shadeFull" autocomplete="off" />
+                    <label class="btn btn-secondary" for="shadeFull" data-mdb-ripple-init>Full shade</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="colour" class="form-label">What is the colour of the flowers?</label>
+                <input type="text" class="form-control" id="colour">
             </div>
 
         </div>
