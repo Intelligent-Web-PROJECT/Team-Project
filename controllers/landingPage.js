@@ -5,7 +5,7 @@ const {getLocation} = require("../public/javascripts/location");
 async function getLandingPage(req, res) {
     //Sample usage for location. Everytime you create an instance, it'll read the current fetched location.
     const location = await getLocation()
-    res.render('index', {title: 'FloraScan', city: location.region})
+    res.render('index', {title: 'FloraScan', city: location.region, auth: req.isLoggedIn, user:req.user})
 }
 
 async function getWelcomePage(req, res) {

@@ -30,3 +30,18 @@ a:hover{
 .card:hover {
   transform: scale(1.18); /* Enlarge the card by 5% when hovered */
 }
+
+.logo {
+  width: 50px;
+  height: auto;
+  background-color: transparent;
+  border: none;
+}
+
+.nav-bg {
+  background-color: #DCE1DE;
+  color: #198754;
+}
+.nav-link {
+  color: #198754;
+}
