@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', function (){
     const leavesYes = document.getElementById('leavesYes')
     const fruitsYes = document.getElementById('fruitsYes')
 
+    const imagePreview = document.getElementById('imagePreview')
+
     flowerYes.addEventListener('change', () => {
         flowerColour.disabled = !flowerYes.checked;
     })
@@ -32,6 +34,17 @@ document.addEventListener('DOMContentLoaded', function (){
         const selectedFile = this.files[0];
         const displayText = document.querySelector("#fileName");
         displayText.textContent = selectedFile ? `Selected file: ${selectedFile.name}` : "";
+        const file = imageUpload.files[0]
+
+        imagePreview.innerHTML = ''
+
+        const reader = new FileReader()
+        reader.onload = function() {
+            var templateString = `<img src="${reader.result}" class="img-thumbnail">`
+            imagePreview.innerHTML += templateString
+        }
+        reader.readAsDataURL(file)
+
     });
 
     cameraBtn.addEventListener('click', () => {

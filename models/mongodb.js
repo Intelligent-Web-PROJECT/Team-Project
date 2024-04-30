@@ -15,13 +15,14 @@ async function searchUser(filter) {
     return User.findOne(filter);
 }
 
-async function listNewPlant(user, plant, photos){
+async function listNewPlant(user, plant, photos, location){
     try {
 
         const newPlant = new Plant({
             name: plant.name,
             user: user,
             description: plant.description,
+            location: location,
             height: plant.height,
             spread: plant.spread,
             photos: photos,

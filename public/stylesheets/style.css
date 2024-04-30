@@ -45,3 +45,54 @@ a:hover{
 .nav-link {
   color: #198754;
 }
+
+.form-check-inline {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+}
+.btn-group, .form-control {
+  display: flex;
+  justify-content: start;
+  margin-bottom: 16px;
+  width: 80%;
+}
+
+.btn-secondary {
+  background-color: #4CAF50; /* Green background */
+  border: none;
+  color: white;
+  padding: 10px 24px; /* Larger click area and better visual */
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s; /* Smooth transition for hover effect */
+  cursor: pointer;
+}
+.btn-secondary:hover {
+  background-color: white;
+  color: black;
+}
+.form-control {
+  padding: 10px;
+  font-size: 16px;
+  width: 300px; /* Consistent width with buttons */
+}
+
+.formLabel {
+  width: 100px; /* Adjust the width as needed */
+}
+.formInput {
+  flex: 1; /* Ensures the input field fills up the remaining space */
+}
+.formField {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px; /* Adjust margin as needed */
+}

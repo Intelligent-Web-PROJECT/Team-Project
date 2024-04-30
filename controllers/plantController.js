@@ -1,5 +1,5 @@
 const {listNewPlant} = require("../models/mongodb");
-
+const {getLocation} = require("../public/javascripts/location");
 
 function listPlant(req, res) {
     res.render('plant/list_plant',{user: req.user, auth: req.isLoggedIn})
@@ -18,7 +18,15 @@ async function postPlant(req, res) {
             fileBase64.push(base64Data)
         }
 
-        const plant = await listNewPlant(req.user.id, req.body, fileBase64)
+        const location = await getLocation()
+
+        const plantLocation = {
+            place: location.city +", "+ location.region,
+            latitude: location.latitude,
+            longitude: location.longitude
+        }
+
+        const plant = await listNewPlant(req.user.id, req.body, fileBase64, plantLocation)
 
         console.log(plant)
 
