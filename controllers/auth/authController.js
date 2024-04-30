@@ -26,6 +26,16 @@ function getRegisterPage(req, res) {
     });
 }
 
+const logoutUser = (req, res, next) => {
+    req.logout(err => {
+        if (err) return next(err);
+        req.session.destroy(err => {
+            if (err) return next(err);
+            res.redirect("/login");
+        });
+    });
+};
+
 const registerUser = async (req, res, next) => {
     const {username, email, password, confirmPassword} = req.body;
 
@@ -239,6 +249,7 @@ module.exports = {
     getForgotPassword,
     getForgotUser,
     getResetPasswordPage,
-    resetPassword
+    resetPassword,
+    logoutUser
 
 }

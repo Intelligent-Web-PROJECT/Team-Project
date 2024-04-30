@@ -45,6 +45,7 @@ passport.use(passportStrategy)
 passport.serializeUser(passportSerializeUser)
 passport.deserializeUser(passportDeserializeUser)
 
+
 app.use('/', authInfo, indexRouter);
 app.use('/', authRouters);
 app.use('/', isAuthenticated, usersRouter);
