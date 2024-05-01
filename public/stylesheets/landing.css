@@ -1,0 +1,29 @@
+.landing-slogan {
+    font-family: "Poppins", sans-serif;
+    color: #198754; /* Set font color */
+    font-style: italic; /* Make the font italic */
+    text-align: center; /* Center align the text */
+}
+
+.card-body {
+    background-color: #f8f9fa; /* Light gray background */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Add some padding */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.card-title {
+    color: #198754; /* Green color for the title */
+    font-family: "Poppins", sans-serif; /* Font family */
+    font-size: 1.15rem; /* Larger font size */
+    font-weight: bold; /* Bold font weight */
+    text-align: center; /* Center align the text */
+}
+
+.card-text {
+    color: #6c757d; /* Dark gray color for the text */
+    font-family: "Poppins", sans-serif; /* Font family */
+    font-size: 0.95rem; /* Font size */
+    font-style: italic; /* Make the font italic */
+    line-height: 1.5; /* Line height for better readability */
+}
