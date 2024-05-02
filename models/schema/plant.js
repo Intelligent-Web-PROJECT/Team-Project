@@ -15,6 +15,17 @@ const plantSchema = new mongoose.Schema({
         required: true,
         default: false
     },
+    location: {
+        place: {
+            type: String
+        },
+        latitude: {
+            type: Number
+        },
+        longitude: {
+            type: Number
+        }
+    },
     description: {
         type: String
     },
@@ -27,16 +38,18 @@ const plantSchema = new mongoose.Schema({
     spread: {
         type: Number
     },
-    photo: {
-        img_type: {
-            type:String,
-            required: true
-        },
-        img_data: {
-            type: Buffer,
-            required: true
+    photos: [
+        {
+            img_type: {
+                type:String,
+                required: false
+            },
+            img_data: {
+                type: Buffer,
+                required: false
+            }
         }
-    },
+    ],
     characteristics: {
         have_flowers: {
             type: Boolean

@@ -45,3 +45,61 @@ a:hover{
 .nav-link {
   color: #198754;
 }
+
+.form-check-inline {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+}
+.btn-group, .form-control {
+  display: flex;
+  justify-content: start;
+  margin-bottom: 16px;
+  width: 80%;
+}
+
+.btn-primary {
+  background-color: #DCE1DE; /* Green background */
+  border: none;
+  color: #198754;
+  padding: 10px 24px; /* Larger click area and better visual */
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s; /* Smooth transition for hover effect */
+  cursor: pointer;
+}
+.btn-check:hover {
+  background-color: #367B37;
+  color: black;
+}
+.btn-check:checked + .btn {
+  background-color: #4CAF50; /* Green when selected */
+  color: white;
+}
+.btn-check:checked + .btn:hover {
+  background-color: #367B37; /* Darker green on hover */
+}
+.form-control {
+  padding: 10px;
+  font-size: 16px;
+  width: 300px; /* Consistent width with buttons */
+}
+
+.formLabel {
+  width: 100px; /* Adjust the width as needed */
+}
+.formInput {
+  flex: 1; /* Ensures the input field fills up the remaining space */
+}
+.formField {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px; /* Adjust margin as needed */
+}
