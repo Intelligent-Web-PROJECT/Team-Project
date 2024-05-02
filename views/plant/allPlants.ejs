@@ -1,0 +1,19 @@
+
+<%- include("../components/header") %>
+<%- include("../components/navbar") %>
+
+<h1>All Plants</h1>
+<div class="row">
+    <% plants.forEach(function(plant) { %>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="data:image/<%= plant.photo.img_type %>;base64,<%= plant.photo.img_data.toString('base64') %>" class="card-img-top" alt="<%= plant.name %>">
+                <div class="card-body">
+                    <h5 class="card-title"><%= plant.name %></h5>
+                    <p class="card-text"><%= plant.description %></p>
+                    <a href="/plants/<%= plant._id %>" class="btn btn-primary">View</a>
+                </div>
+            </div>
+        </div>
+    <% }); %>
+</div>

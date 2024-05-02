@@ -1,4 +1,4 @@
-const {listNewPlant} = require("../models/mongodb");
+const {listNewPlant, findAllPlants, findAllPlantsByUserId} = require("../models/mongodb");
 const {getLocation} = require("../public/javascripts/location");
 
 function listPlant(req, res) {
@@ -37,7 +37,40 @@ async function postPlant(req, res) {
     }
 }
 
+async function getMyPlant(req, res) {
+    try {
+        const myPlants = await findAllPlantsByUserId(req.user.id);
+        res.render('plant/myPlants', {plants: myPlants, user: req.user, auth: req.isLoggedIn});
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+async  function getAllPlants(req, res){
+    try {
+        let plants = await findAllPlants();
+        let message='';
+        if (plants.length===0) {
+            // res.render('plant/allPlants', { plants: [], message: "No plants found." });
+            plants=[];
+            message='No plants found.';
+        } else {
+            plants.forEach(plant => {
+                if (plant.photo && plant.photo.img_data) {
+                    plant.photoURL = `data:image/${plant.photo.img_type};base64,${plant.photo.img_data.toString('base64')}`;
+                }
+            });
+        }
+        res.render('plant/allPlants', { plants, user: req.user, auth: req.isLoggedIn, message});
+    } catch (error) {
+        console.error('Error fetching all plants:', error);
+    }
+}
+
 module.exports = {
     listPlant,
-    postPlant
+    postPlant,
+    getMyPlant,
+    getAllPlants
 }
