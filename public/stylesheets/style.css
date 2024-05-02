@@ -63,10 +63,10 @@ a:hover{
   width: 80%;
 }
 
-.btn-secondary {
-  background-color: #4CAF50; /* Green background */
+.btn-primary {
+  background-color: #DCE1DE; /* Green background */
   border: none;
-  color: white;
+  color: #198754;
   padding: 10px 24px; /* Larger click area and better visual */
   text-align: center;
   text-decoration: none;
@@ -75,9 +75,16 @@ a:hover{
   transition-duration: 0.4s; /* Smooth transition for hover effect */
   cursor: pointer;
 }
-.btn-secondary:hover {
-  background-color: white;
+.btn-check:hover {
+  background-color: #367B37;
   color: black;
+}
+.btn-check:checked + .btn {
+  background-color: #4CAF50; /* Green when selected */
+  color: white;
+}
+.btn-check:checked + .btn:hover {
+  background-color: #367B37; /* Darker green on hover */
 }
 .form-control {
   padding: 10px;
