@@ -42,9 +42,22 @@ async function listNewPlant(user, plant, photos, location){
     }
 }
 
+// Function to find all plants by a specific user ID
+async function findAllPlantsByUserId(userId) {
+    return Plant.find({ user: userId }).populate('user', 'username'); // Populate user details
+}
+
+// Function to find all plants in the database
+async function findAllPlants() {
+    return Plant.find().populate('user', 'username'); // Populate user details
+}
+
+
 module.exports = {
     getAllUsers,
     getUserById,
     searchUser,
-    listNewPlant
-}
+    listNewPlant,
+    findAllPlantsByUserId,
+    findAllPlants
+};
