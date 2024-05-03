@@ -3,6 +3,11 @@ document.addEventListener('DOMContentLoaded', function (){
     const cameraBtn = document.getElementById('clickPicBtn')
     const submitBtn = document.getElementById('submitBtn')
     const imageUpload = document.getElementById('imageUpload')
+    const webcamElement = document.getElementById('webcam');
+    const canvasElement = document.getElementById('canvas');
+
+    // Initialize the Webcam library
+    const webcam = new Webcam(webcamElement, 'user', canvasElement);
 
     const name = document.getElementById('name')
     const description = document.getElementById('description')
@@ -27,29 +32,82 @@ document.addEventListener('DOMContentLoaded', function (){
 
 
     uploadBtn.addEventListener("click", function() {
-        imageUpload.click();
+        imageUpload.click(); // Triggers the file input click
     });
 
     imageUpload.addEventListener("change", function() {
-        const selectedFile = this.files[0];
+        imagePreview.innerHTML = ''; // Clear previous previews
+
+        // Update display text to show number of files selected
         const displayText = document.querySelector("#fileName");
-        displayText.textContent = selectedFile ? `Selected file: ${selectedFile.name}` : "";
-        const file = imageUpload.files[0]
+        displayText.textContent = this.files && this.files.length > 0 ? `Selected files: ${this.files.length}` : "";
 
-        imagePreview.innerHTML = ''
-
-        const reader = new FileReader()
-        reader.onload = function() {
-            var templateString = `<img src="${reader.result}" class="img-thumbnail">`
-            imagePreview.innerHTML += templateString
+        // Check if files are present and loop through all selected files
+        if (this.files) {
+            Array.from(this.files).forEach(file => {
+                // Ensure the file is actually a File object
+                if (file instanceof File) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        // Create an image element for each file
+                        const imgElement = `<img src="${e.target.result}" class="img-thumbnail" style="margin-right: 10px;">`;
+                        imagePreview.innerHTML += imgElement; // Append new image element to the preview container
+                    };
+                    reader.readAsDataURL(file); // Read the file as a Data URL
+                }
+            });
         }
-        reader.readAsDataURL(file)
-
     });
 
-    cameraBtn.addEventListener('click', () => {
-        console.log(cameraBtn.innerText)
-    })
+    document.addEventListener('DOMContentLoaded', function() {
+        let uploadBtn = document.getElementById('uploadBtn');
+        if (!uploadBtn) {
+            uploadBtn = document.createElement('button');
+            uploadBtn.id = 'uploadBtn';
+            uploadBtn.innerText = 'Upload Picture';
+            uploadBtn.className = 'btn btn-primary';
+            document.body.appendChild(uploadBtn); // Append to a suitable container in your actual layout
+
+            // Add event listener for upload functionality
+            uploadBtn.addEventListener('click', function() {
+                console.log("Upload the picture...");
+                // Here you would typically handle the file upload process
+            });
+        }
+    });
+
+    cameraBtn.addEventListener('click', function() {
+        if (cameraBtn.innerText === "Click a picture") {
+            // Clear the previous image preview
+            imagePreview.innerHTML = '';
+
+            // Show the webcam and hide the canvas
+            webcamElement.style.display = 'block';
+            canvasElement.style.display = 'none';
+
+            // Start the webcam
+            webcam.start()
+                .then(result => {
+                    console.log("Webcam started");
+                    cameraBtn.innerText = "Take Picture"; // Change button text to prompt user to take a picture
+                })
+                .catch(err => {
+                    console.error("Failed to start webcam:", err);
+                });
+        } else {
+            // Take a picture
+            const picture = webcam.snap();
+            imagePreview.innerHTML = `<img src="${picture}" class="img-thumbnail">`; // Display the new picture
+
+            // Show the canvas and hide the webcam
+            webcamElement.style.display = 'none';
+            webcam.stop(); // Stop the webcam
+
+            console.log("Picture taken");
+            cameraBtn.innerText = "Click a picture"; // Reset button text to allow another picture to be taken
+        }
+    });
+
 
     function getSunExposureValue() {
         const sunRadios = document.querySelectorAll('input[name="sunRadio"]');
