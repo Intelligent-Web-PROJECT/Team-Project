@@ -119,14 +119,33 @@ a:hover{
   overflow-y: auto;
 }
 .chat-message {
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 12px;
-  padding: 8px 15px;
+  display: flex;
+  align-items: center;
   margin-bottom: 10px;
-  max-width: 80%;
-  word-wrap: break-word;
-  position: relative;
+  padding: 8px;
+  border-radius: 8px;
+  background: #f4f4f8;
+}
+
+.profile-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-content {
+  margin-left: 7px;
+}
+
+.message-text {
+  margin: 0;
+}
+
+.message-sender {
+  font-weight: bold;
+  margin-bottom: 2px;
 }
 
 
@@ -137,11 +156,17 @@ a:hover{
   border-right: 10px solid #007bff;
 }
 
+.chat-message.other-message {
+  background-color: #007bff;
+  color: white;
+  margin-right: auto;
+  border-right: 10px solid #007bff;
+}
+
 
 .history, .new-message{
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px
 }
 
 .chat-input form {

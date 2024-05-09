@@ -20,6 +20,5 @@ router.get('/allPlants', getAllPlants);
 // Get My Plants page
 router.get('/my-plants', getMyPlant);
 
-router.get('/chat/:id?', getChats)
 
 module.exports = router;

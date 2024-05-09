@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', init);
 
+const {addComment} = require('../../models/mongodb')
+
 let socket = io()
 let roomNo = null
 let name = null
@@ -19,8 +21,9 @@ function init() {
         console.log(userId + ' joined');
     });
 
-    socket.on('chat', function (room, userId, chatText) {
+    socket.on('chat', async function (room, userId, chatText) {
         console.log('Received message:', chatText);
+        await addComment(room, userId, chatText)
         writeNewMessage(chatText, userId);
     });
 }
@@ -36,13 +39,37 @@ function connectToRoom() {
 }
 
 function writeNewMessage(text, userId) {
-    let message = document.createElement('p');
-    message.textContent = text;
-    message.className = 'chat-message user-message';
-    newMessage.appendChild(message);
+    let messageContent = document.createElement('div');
+    messageContent.className = userId === name ? 'chat-message user-message' : 'chat-message other-message'
 
-    chatInput.value = '';
-    newMessage.scrollTop = newMessage.scrollHeight;
+    const userProfile = document.createElement('i')
+    userProfile.className = 'fa-regular fa-user profile-icon'
+    userProfile.style.fontSize = '20px'
+    userProfile.style.marginRight = '5px'
+
+    const content = document.createElement('div')
+    content.className = 'message-content'
+
+    const sender = document.createElement('p')
+    sender.className = 'message-sender'
+    sender.textContent = userId
+
+    const message = document.createElement('p')
+    message.className = 'message-text'
+    message.textContent = text
+
+    content.appendChild(sender)
+    content.appendChild(message)
+
+    messageContent.appendChild(userProfile)
+    messageContent.appendChild(content)
+
+    newMessage.appendChild(messageContent)
+
+    chatInput.value = ''
+    newMessage.scrollTop = newMessage.scrollHeight
+
+
 }
 
 function sendMessage() {
