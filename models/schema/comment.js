@@ -9,11 +9,11 @@ const commentSchema = new mongoose.Schema({
     comments: [
         {
             user: {
-                type: mongoose.Schema.Types.ObjectId,
+                type: String,
                 ref: 'User',
                 required: true
             },
-            comment: {
+            text: {
                 type: String,
                 required: true
             },

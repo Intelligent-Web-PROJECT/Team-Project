@@ -1,6 +1,7 @@
+
+
 document.addEventListener('DOMContentLoaded', init);
 
-const {addComment} = require('../../models/mongodb')
 
 let socket = io()
 let roomNo = null
@@ -21,9 +22,9 @@ function init() {
         console.log(userId + ' joined');
     });
 
-    socket.on('chat', async function (room, userId, chatText) {
+    socket.on('chat', function (room, userId, chatText) {
         console.log('Received message:', chatText);
-        await addComment(room, userId, chatText)
+
         writeNewMessage(chatText, userId);
     });
 }

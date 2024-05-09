@@ -52,28 +52,34 @@ async function findAllPlants() {
     return Plant.find().populate('user', 'username'); // Populate user details
 }
 
-async function addComment(plantId, userId, comment) {
-    await Comment.findOne({plant: plantId})
-        .then(comment => {
-            if (!comment) {
-                const newComment = new Comment({
-                    plant: plantId,
-                    comments: [{
-                        user: userId,
-                        comment: comment,
-                        time: Date.now()
-                    }]
-                })
-                return newComment.save()
-            } else {
-                comment.comments.push({
-                    user: userId, comment: comment, time: Date.now()
-                })
-                return comment.save()
-            }
-        })
-        .then(()=> console.log('message added successfully'))
-        .catch(err => console.log('Error while adding message'))
+async function addComment(plantId, userId, commentText) {
+    try {
+        const existingComment = await Comment.findOne({plant: plantId})
+        if (!existingComment) {
+            const newComment = new Comment({
+                plant: plantId,
+                comments: [{
+                    user: userId,
+                    text: commentText,
+                    time: Date.now()
+                }]
+            })
+            await newComment.save()
+        } else {
+            existingComment.comments.push({
+                user: userId,
+                text: commentText,
+                time: Date.now()
+            })
+            await existingComment.save()
+        }
+    }catch (error) {
+        console.log(error)
+    }
+}
+
+async function getComments(plantId) {
+    return await Comment.findOne({plant: plantId})
 }
 
 
@@ -84,5 +90,6 @@ module.exports = {
     listNewPlant,
     findAllPlantsByUserId,
     findAllPlants,
-    addComment
+    addComment,
+    getComments
 };

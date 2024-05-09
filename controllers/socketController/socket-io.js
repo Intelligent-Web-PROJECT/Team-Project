@@ -1,4 +1,4 @@
-
+const {addComment} = require('../../models/mongodb')
 
 exports.init = function(io) {
     io.sockets.on('connection', function (socket) {
@@ -11,7 +11,9 @@ exports.init = function(io) {
                 io.sockets.to(room).emit('joined', room, userId)
             });
 
-            socket.on('chat', function (room, userId, chatText) {
+            socket.on('chat', async function (room, userId, chatText) {
+
+                await addComment(room, userId, chatText)
                 io.sockets.to(room).emit('chat', room, userId, chatText)
             })
 

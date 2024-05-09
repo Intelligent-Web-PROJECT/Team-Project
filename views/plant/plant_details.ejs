@@ -73,13 +73,22 @@
 </div>
 
 <!-- End of Design Block -->
-
 <p hidden="hidden" id="username"><%= user.username %></p>
 <button class="btn btn-primary" id="viewChats" onclick="connectToRoom()">View Chats</button>
 <div class="chat-container container" id="chat-container" style="display: none">
     <h3 class="text-muted">Chat </h3>
     <div class="chat-section p-3">
-        <div class="history" id="history"></div>
+        <div class="history" id="history">
+            <% plantComment?.comments.forEach(comment => { %>
+                <div class="chat-message <%= comment.user === user.username ? 'user-message' : 'other-message' %>">
+                    <i class="fa-regular fa-user profile-icon"></i>
+                    <div class="message-content">
+                        <p class="message-sender"><%= comment.user %></p>
+                        <p class="message-text"><%= comment.text %></p>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
         <div class="new-message" id="new-message"></div>
         <div class="chat-input">
             <form onsubmit="return false;">
