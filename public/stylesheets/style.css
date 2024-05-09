@@ -64,15 +64,15 @@ a:hover{
 }
 
 .btn-primary {
-  background-color: #DCE1DE; /* Green background */
+  background-color: #DCE1DE;
   border: none;
   color: #198754;
-  padding: 10px 24px; /* Larger click area and better visual */
+  padding: 10px 24px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  transition-duration: 0.4s; /* Smooth transition for hover effect */
+  transition-duration: 0.4s;
   cursor: pointer;
 }
 .btn-check:hover {
@@ -80,26 +80,78 @@ a:hover{
   color: black;
 }
 .btn-check:checked + .btn {
-  background-color: #4CAF50; /* Green when selected */
+  background-color: #4CAF50;
   color: white;
 }
 .btn-check:checked + .btn:hover {
-  background-color: #367B37; /* Darker green on hover */
+  background-color: #367B37;
 }
 .form-control {
   padding: 10px;
   font-size: 16px;
-  width: 300px; /* Consistent width with buttons */
+  width: 300px;
 }
 
 .formLabel {
-  width: 100px; /* Adjust the width as needed */
+  width: 100px;
 }
 .formInput {
-  flex: 1; /* Ensures the input field fills up the remaining space */
+  flex: 1;
 }
 .formField {
   display: flex;
   align-items: center;
-  margin-bottom: 16px; /* Adjust margin as needed */
+  margin-bottom: 16px;
+}
+
+
+.chat-container {
+  margin: 20px 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+  padding: 20px;
+}
+.chat-section {
+  background-color: #e9ecef;
+  border-radius: 8px;
+  padding: 10px;
+  overflow-y: auto;
+}
+.chat-message {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  padding: 8px 15px;
+  margin-bottom: 10px;
+  max-width: 80%;
+  word-wrap: break-word;
+  position: relative;
+}
+
+
+.chat-message.user-message {
+  background-color: #007bff;
+  color: white;
+  margin-left: auto;
+  border-right: 10px solid #007bff;
+}
+
+
+.history, .new-message{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px
+}
+
+.chat-input form {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+#chat_input {
+  flex-grow: 1;
+}
+#chat_send {
+  padding: 0.375rem 0.75rem;
 }

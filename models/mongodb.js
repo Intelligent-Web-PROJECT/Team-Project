@@ -1,4 +1,4 @@
-const {User, Plant} = require('./models')
+const {User, Plant, Comment} = require('./models')
 
 const mongoose = require('mongoose')
 
