@@ -16,6 +16,59 @@ document.addEventListener('DOMContentLoaded', function (){
     const fruitsYes = document.getElementById('fruitsYes')
 
     const imagePreview = document.getElementById('imagePreview')
+    let plantLatitude = 0
+    let plantLongitude = 0
+
+    var map = L.map('map');
+    map.setView([51.505, -0.09], 13);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        // attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+
+    navigator.geolocation.getCurrentPosition(success, error);
+
+    let marker, circle, zoomed;
+    function success(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        const accuracy = position.coords.accuracy;
+
+        if (marker) {
+            map.removeLayer(marker)
+            map.removeLayer(circle)
+        }
+
+        marker = L.marker([latitude, longitude]).addTo(map)
+        circle = L.circle([latitude, longitude], {radius: accuracy}).addTo(map)
+
+        if (!zoomed) {
+            zoomed = map.fitBounds(circle.getBounds());
+        }
+
+        map.on('click', (event) => {
+            if (marker) {
+                map.removeLayer(marker)
+                map.removeLayer(circle)
+            }
+            marker = L.marker([event.latlng.lat, event.latlng.lng]).addTo(map)
+            circle = L.circle([event.latlng.lat, event.latlng.lng], {radius: accuracy}).addTo(map)
+            plantLatitude = event.latlng.lat
+            plantLongitude = event.latlng.lng
+            console.log(event.latlng)
+        })
+    }
+
+    function error(error) {
+        if (error.code === 1) {
+            alert('Please allow geolocation access')
+        } else {
+            alert('Cannot get current location')
+        }
+    }
+
 
     flowerYes.addEventListener('change', () => {
         flowerColour.disabled = !flowerYes.checked;
@@ -79,6 +132,8 @@ document.addEventListener('DOMContentLoaded', function (){
         if (flowerYes.checked) {
             formData.append('flowerColour', flowerColour.value)
         }
+        formData.append('latitude', plantLatitude)
+        formData.append('longitude', plantLongitude)
 
         if (imageUpload.files.length === 0) {
             return alert('Please Upload at least one photo of the plant')
@@ -96,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function (){
                 if (!response.ok) {
                     throw new Error('Network response was not ok')
                 }
-                window.location.href = '/welcome'
+                window.location.href = '/my-plants'
                 return response.text()
             })
             .catch(error => {
