@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 const {User} = require('./schema/user')
 const {Plant} = require('./schema/plant')
+const {Comment} = require('./schema/comment')
 
 const MONGO_HOST = process.env.MONGO_HOST || 'localhost'
 const MONGO_USER = process.env.MONGO_USER || 'admin'
@@ -34,5 +35,6 @@ if (process.env.ENVIRONMENT !== 'test') {
 module.exports = {
     User,
     Plant,
+    Comment,
     connected
 }
