@@ -101,3 +101,10 @@ function onListening() {
 
   console.log('Server is running on: http://localhost:' + addr.port)
 }
+
+const io = require('socket.io')(server, {
+  pingTimeout: 60000
+})
+
+var socket_module = require('../controllers/socketController/socket-io')
+socket_module.init(io, app)

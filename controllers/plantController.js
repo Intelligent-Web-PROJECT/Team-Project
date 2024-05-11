@@ -37,6 +37,10 @@ async function postPlant(req, res) {
     }
 }
 
+function getChats(req, res) {
+    res.render('plant/plant_detail', {user: req.user, auth: req.isLoggedIn})
+}
+
 async function getMyPlant(req, res) {
     try {
         const myPlants = await findAllPlantsByUserId(req.user.id);
@@ -71,6 +75,7 @@ async  function getAllPlants(req, res){
 module.exports = {
     listPlant,
     postPlant,
+    getChats,
     getMyPlant,
     getAllPlants
 }

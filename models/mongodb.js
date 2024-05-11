@@ -1,4 +1,4 @@
-const {User, Plant} = require('./models')
+const {User, Plant, Comment} = require('./models')
 
 const mongoose = require('mongoose')
 
@@ -52,6 +52,36 @@ async function findAllPlants() {
     return Plant.find().populate('user', 'username'); // Populate user details
 }
 
+async function addComment(plantId, userId, commentText) {
+    try {
+        const existingComment = await Comment.findOne({plant: plantId})
+        if (!existingComment) {
+            const newComment = new Comment({
+                plant: plantId,
+                comments: [{
+                    user: userId,
+                    text: commentText,
+                    time: Date.now()
+                }]
+            })
+            await newComment.save()
+        } else {
+            existingComment.comments.push({
+                user: userId,
+                text: commentText,
+                time: Date.now()
+            })
+            await existingComment.save()
+        }
+    }catch (error) {
+        console.log(error)
+    }
+}
+
+async function getComments(plantId) {
+    return await Comment.findOne({plant: plantId})
+}
+
 
 module.exports = {
     getAllUsers,
@@ -59,5 +89,7 @@ module.exports = {
     searchUser,
     listNewPlant,
     findAllPlantsByUserId,
-    findAllPlants
+    findAllPlants,
+    addComment,
+    getComments
 };
