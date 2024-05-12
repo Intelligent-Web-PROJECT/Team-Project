@@ -196,21 +196,29 @@ document.addEventListener('DOMContentLoaded', function (){
                 formData.append('photos', imageUpload.files[i]);
             }
         }
-
-        fetch('list-plant', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                window.location.href = '/my-plants'
-                return response.text()
+let plants={};
+        for (const [key, value] of formData.entries()) {
+            plants[key] = value;
+        }
+        if (navigator.onLine){
+            fetch('list-plant', {
+                method: 'POST',
+                body: formData
             })
-            .catch(error => {
-                console.log(error);
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    window.location.href = '/my-plants'
+                    return response.text()
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+        else {
+            insertPlantSighting(plants,-1);
+        }
     });
 
 
