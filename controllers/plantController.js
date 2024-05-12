@@ -10,6 +10,21 @@ async function postPlant(req, res) {
 
         const files = req.files
         const fileBase64 = []
+
+        if(req.body.camera){
+            console.log(req.body.camera)
+            let camera = req.body.camera
+            const matches = camera.match(/^data:(.+);base64,(.*)$/);
+            if (!matches || matches.length !== 3) {
+                throw new Error("Invalid base64 data");
+            }
+            const base64 = {
+                img_type: matches[1], // This captures the MIME type (e.g., 'image/webp')
+                img_data: Buffer.from(matches[2], 'base64')  // This captures the actual base64 buffer encoded data (without MIME type and prefix)
+
+            }
+            fileBase64.push(base64)
+        }
         for (let i = 0; i < files.length; i++) {
             const image_data = Buffer.from(files[i].buffer, 'base64')
             const image_type = files[i].mimetype
