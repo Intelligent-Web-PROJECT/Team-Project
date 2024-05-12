@@ -9,6 +9,8 @@ const flash = require('express-flash');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouters = require('./routes/authRoutes');
+
+
 const {sessionSetup, passportStrategy, passportSerializeUser, passportDeserializeUser, sessionErrorHandler} = require("./auth/passportAuth");
 const {isAuthenticated, authInfo} = require("./middlewares/auth");
 
