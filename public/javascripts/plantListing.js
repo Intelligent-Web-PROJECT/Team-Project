@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', function (){
             map.removeLayer(marker)
             map.removeLayer(circle)
         }
+        plantLatitude = latitude
+        plantLongitude = longitude
 
         marker = L.marker([latitude, longitude]).addTo(map)
         circle = L.circle([latitude, longitude], {radius: accuracy}).addTo(map)
