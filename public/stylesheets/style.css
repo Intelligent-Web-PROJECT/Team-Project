@@ -106,7 +106,7 @@ a:hover{
 
 
 .chat-container {
-  margin: 20px 10px;
+  margin: 20px auto;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 15px rgba(0,0,0,0.1);
@@ -179,6 +179,7 @@ a:hover{
 }
 #chat_send {
   padding: 0.375rem 0.75rem;
+  height: 45px;
 }
 
 /*Plant Details CSS From Here:*/

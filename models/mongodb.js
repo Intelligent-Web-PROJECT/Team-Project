@@ -22,7 +22,10 @@ async function listNewPlant(user, plant, photos, location){
             name: plant.name,
             user: user,
             description: plant.description,
-            location: location,
+            location: {
+                latitude: plant.latitude,
+                longitude: plant.longitude
+            },
             height: plant.height,
             spread: plant.spread,
             photos: photos,

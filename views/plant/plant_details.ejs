@@ -83,7 +83,7 @@
                 <div class="chat-message <%= comment.user === user.username ? 'user-message' : 'other-message' %>">
                     <i class="fa-regular fa-user profile-icon"></i>
                     <div class="message-content">
-                        <p class="message-sender"><%= comment.user %></p>
+                        <p class="message-sender"><%= comment.user === user.username ? 'Me' : comment.user %></p>
                         <p class="message-text"><%= comment.text %></p>
                     </div>
                 </div>

@@ -32,16 +32,10 @@ async function postPlant(req, res) {
 
             fileBase64.push(base64Data)
         }
+        console.log(fileBase64)
 
-        const location = await getLocation()
 
-        const plantLocation = {
-            place: location.city +", "+ location.region,
-            latitude: location.latitude,
-            longitude: location.longitude
-        }
-
-        const plant = await listNewPlant(req.user.id, req.body, fileBase64, plantLocation)
+        const plant = await listNewPlant(req.user.id, req.body, fileBase64)
 
         console.log(plant)
 

@@ -16,9 +16,6 @@ const plantSchema = new mongoose.Schema({
         default: false
     },
     location: {
-        place: {
-            type: String
-        },
         latitude: {
             type: Number
         },
