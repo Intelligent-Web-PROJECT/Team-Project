@@ -13,7 +13,7 @@
                             <div class="d-flex">
                                 <button class="btn btn-primary me-2" id="uploadBtn">Upload</button>
                                 <button class="btn btn-success" id="clickPicBtn">Click a picture</button>
-                                <input type="file" id="imageUpload" name="imageUpload" accept="image/*" style="display: none">
+                                <input type="file" id="imageUpload" name="imageUpload" accept="image/*" multiple style="display: none">
                             </div>
 
                         </div>
@@ -43,6 +43,12 @@
                         <p class="p-1">Image preview</p>
                         <div id="imagePreview" class="p-1"></div>
                         <p class="text-muted mt-2" id="fileName"></p>
+                        <div class="webcam-container">
+                            <div class="webcam-container" style="position: relative;">
+                                <video id="webcam" style="width: 100%;" autoplay></video>
+                                <canvas id="canvas" style="width: 100%; display: none;"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -105,5 +111,5 @@
         </div>
     </div>
 </div>
-
+<script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
 <script src="/javascripts/plantListing.js"></script>

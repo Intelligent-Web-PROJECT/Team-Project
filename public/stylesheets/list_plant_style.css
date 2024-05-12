@@ -1,0 +1,5 @@
+#webcam, #canvas {
+    width: 100%;  /* Adjust based on your layout needs */
+    height: auto; /* Maintain aspect ratio or set a fixed height as needed */
+    display: none; /* Initially hide them */
+}
