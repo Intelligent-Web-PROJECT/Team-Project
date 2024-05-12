@@ -41,7 +41,7 @@ const passportStrategy = new LocalStrategy({
 
 // Authorisation / Login function
 const passportAuthenticate = passport.authenticate('local', {
-        successReturnToOrRedirect: '/welcome',
+        successReturnToOrRedirect: '/my-plants',
         failureRedirect: '/login',
         failureFlash: true
     }
