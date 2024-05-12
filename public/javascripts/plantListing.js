@@ -22,6 +22,10 @@ document.addEventListener('DOMContentLoaded', function (){
 
     const imagePreview = document.getElementById('imagePreview')
 
+    let base64 = null
+
+
+
     flowerYes.addEventListener('change', () => {
         flowerColour.disabled = !flowerYes.checked;
     })
@@ -59,23 +63,6 @@ document.addEventListener('DOMContentLoaded', function (){
         }
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        let uploadBtn = document.getElementById('uploadBtn');
-        if (!uploadBtn) {
-            uploadBtn = document.createElement('button');
-            uploadBtn.id = 'uploadBtn';
-            uploadBtn.innerText = 'Upload Picture';
-            uploadBtn.className = 'btn btn-primary';
-            document.body.appendChild(uploadBtn); // Append to a suitable container in your actual layout
-
-            // Add event listener for upload functionality
-            uploadBtn.addEventListener('click', function() {
-                console.log("Upload the picture...");
-                // Here you would typically handle the file upload process
-            });
-        }
-    });
-
     cameraBtn.addEventListener('click', function() {
         if (cameraBtn.innerText === "Click a picture") {
             // Clear the previous image preview
@@ -97,11 +84,16 @@ document.addEventListener('DOMContentLoaded', function (){
         } else {
             // Take a picture
             const picture = webcam.snap();
+            console.log(picture)
+            console.log(typeof(picture))
+            base64 = picture
             imagePreview.innerHTML = `<img src="${picture}" class="img-thumbnail">`; // Display the new picture
 
             // Show the canvas and hide the webcam
             webcamElement.style.display = 'none';
             webcam.stop(); // Stop the webcam
+
+            
 
             console.log("Picture taken");
             cameraBtn.innerText = "Click a picture"; // Reset button text to allow another picture to be taken
@@ -124,42 +116,46 @@ document.addEventListener('DOMContentLoaded', function (){
     }
 
     submitBtn.addEventListener('click', () => {
-
-        let formData = new FormData()
-        formData.append('name', name.value)
-        formData.append('description', description.value)
-        formData.append('height', height.value)
-        formData.append('spread', spread.value)
-        formData.append('flowers', flowerYes.checked)
-        formData.append('leaves', leavesYes.checked)
-        formData.append('fruits', fruitsYes.checked)
-        formData.append('sunExposure', getSunExposureValue())
+        let formData = new FormData();
+        formData.append('name', name.value);
+        formData.append('description', description.value);
+        formData.append('height', height.value);
+        formData.append('spread', spread.value);
+        formData.append('flowers', flowerYes.checked);
+        formData.append('leaves', leavesYes.checked);
+        formData.append('fruits', fruitsYes.checked);
+        formData.append('sunExposure', getSunExposureValue());
         if (flowerYes.checked) {
-            formData.append('flowerColour', flowerColour.value)
+            formData.append('flowerColour', flowerColour.value);
         }
-
-        if (imageUpload.files.length === 0) {
-            return alert('Please Upload at least one photo of the plant')
+        if (base64 !== null) {
+            formData.append('camera', base64);
+        }
+        if (imageUpload.files.length === 0 && base64 === null) {
+            return alert('Please Upload at least one photo of the plant');
         } else {
             for (var i = 0; i < imageUpload.files.length; i++) {
-                formData.append('photos', imageUpload.files[i])
+                formData.append('photos', imageUpload.files[i]);
             }
         }
 
+        console.log(formData)
+
         fetch('list-plant', {
-            method:'POST',
+            method: 'POST',
             body: formData
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok')
+                    throw new Error('Network response was not ok');
                 }
-                window.location.href = '/welcome'
-                return response.text()
+                window.location.href = '/welcome';
+                return response.text();
             })
             .catch(error => {
-                console.log(error)
-            })
-    })
+                console.log(error);
+            });
+    });
+
 
 })
