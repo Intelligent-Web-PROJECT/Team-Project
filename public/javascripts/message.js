@@ -53,7 +53,7 @@ function writeNewMessage(text, userId) {
 
     const sender = document.createElement('p')
     sender.className = 'message-sender'
-    sender.textContent = userId
+    sender.textContent = userId === name ? 'Me' : userId
 
     const message = document.createElement('p')
     message.className = 'message-text'
