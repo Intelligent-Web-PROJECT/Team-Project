@@ -1,7 +1,6 @@
 <%- include("../components/header") %>
 <%- include("../components/navbar") %>
 
-
 <!-- Banner -->
 <div class="landing-slogan text-center py-4">
     <h1>Plant Details </h1>
@@ -14,7 +13,7 @@
     <div class="container container-detail">
         <div class="card rounded bg-light mx-auto text-center no-enlarge">
             <div class="detail-image-container">
-                <% if (plant.photos.length>0 ) { %>
+                <% if (plant.photos.length > 0) { %>
                     <img src="data:image/<%= plant.photos[0].img_type %>;base64,<%= Buffer.from(plant.photos[0].img_data).toString('base64') %>" class="card-img-top img-fluid" alt="Plant Image">
                 <% } else { %>
                     <img src="/images/placeholder.jpg" class="card-img-top img-fluid" alt="Plant Image">
@@ -67,12 +66,48 @@
                     <div class="value"><%= plant.characteristics.flower_colour || 'N/A' %></div>
                 </div>
 
+                <!-- Display DBpedia Information -->
+                <% if (dbpediaInfo) { %>
+                    <h2>Additional Information from DBpedia</h2>
+                    <div class="plant-detail">
+                        <div class="label">Plant Overview:</div>
+                        <div class="value"><%= dbpediaInfo.description %></div>
+                    </div>
+
+                    <% if (dbpediaInfo.taxon) { %>
+                        <div class="plant-detail">
+                            <div class="label">Taxon:</div>
+                            <div class="value"><%= dbpediaInfo.taxon %></div>
+                        </div>
+                    <% } %>
+
+                    <% if (dbpediaInfo.primaryTopicUrl) { %>
+                        <div class="plant-detail">
+                            <div class="label">Wikipedia Page:</div>
+                            <div class="value"><a href="<%= dbpediaInfo.primaryTopicUrl %>" target="_blank">Learn More</a></div>
+                        </div>
+                    <% } else { %>
+                        <div class="plant-detail">
+                            <div class="label">Wikipedia Page:</div>
+                            <div class="value">Not Available</div>
+                        </div>
+                    <% } %>
+
+
+                <% } else { %>
+                    <p>No additional information available from DBpedia for this plant.</p>
+                <% } %>
+                <!-- End of DBpedia Information -->
+
+
             </div>
         </div>
     </div>
 </div>
 
 <!-- End of Design Block -->
+
+
 <p hidden="hidden" id="username"><%= user.username %></p>
 <button class="btn btn-primary" id="viewChats" onclick="connectToRoom()">View Chats</button>
 <div class="chat-container container" id="chat-container" style="display: none">
