@@ -1,7 +1,13 @@
 <%- include("components/header") %>
 
 <%- include("components/navbar") %>
-
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('./serviceWorker.js')
+            .then(function() { console.log('Service Worker Registered'); });
+    }
+</script>
 
 <!-- Slogan/Banner -->
 <div class="landing-slogan text-center py-4">

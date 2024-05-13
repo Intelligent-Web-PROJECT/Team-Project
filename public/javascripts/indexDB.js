@@ -16,7 +16,7 @@ function insertPlantSighting (data,id){
     addRequest.onsuccess = (event) => {
         console.log("New plants sighting added to the database with id:", event.target.result);
         setTimeout(() => {
-            //window.location.href = "/";
+            window.location.href = "/";
         }, 1000);
     };
     addRequest.onerror = (event) => {
