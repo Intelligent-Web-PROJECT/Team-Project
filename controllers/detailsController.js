@@ -32,7 +32,6 @@ async function getPlantDetails(req, res) {
 // Function to fetch plant information from DBpedia
 async function fetchPlantInfo(plantName) {
     return new Promise((resolve, reject) => {
-        // Construct SPARQL query
         const sparqlQuery = `
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
             PREFIX dbo: <http://dbpedia.org/ontology/>
@@ -41,45 +40,37 @@ async function fetchPlantInfo(plantName) {
             
             SELECT ?description ?taxon ?primaryTopicUrl
             WHERE {
-                ?plant rdfs:label "${plantName}"@en ;
-                       dbo:abstract ?description ;
-                       dbp:taxon ?taxon .
-                OPTIONAL { 
-                    ?plant foaf:isPrimaryTopicOf ?primaryTopic .
-                    BIND(?primaryTopic AS ?primaryTopicUrl) .
-                 }
-                FILTER (langMatches(lang(?description), "en")) .
+                ?plant rdfs:label "${plantName}"@en .
+                OPTIONAL { ?plant dbo:abstract ?description FILTER (langMatches(lang(?description), "en")) }
+                OPTIONAL { ?plant dbp:taxon ?taxon }
+                OPTIONAL { ?plant foaf:isPrimaryTopicOf ?primaryTopicUrl }
             }
             LIMIT 1`;
 
-        // Encode the query as a URL parameter
         const encodedQuery = encodeURIComponent(sparqlQuery);
-
-        // Build the URL for the SPARQL query
         const endpointUrl = 'https://dbpedia.org/sparql';
         const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
 
         console.log('SPARQL Query URL:', url);
 
-        // Make the HTTPS GET request
+        const https = require('https');
         const request = https.get(url, (response) => {
             let data = '';
 
-            // Concatenate response data
             response.on('data', (chunk) => {
                 data += chunk;
             });
 
-            // Extract plant description, taxon, and primaryTopicUrl, and resolve the promise
             response.on('end', () => {
                 try {
                     const jsonData = JSON.parse(data);
                     if (jsonData.results.bindings.length === 0) {
                         resolve(null);
                     } else {
-                        const description = jsonData.results.bindings[0].description.value;
-                        const taxon = jsonData.results.bindings[0].taxon ? jsonData.results.bindings[0].taxon.value : null;
-                        const primaryTopicUrl = jsonData.results.bindings[0].primaryTopicUrl ? jsonData.results.bindings[0].primaryTopicUrl.value : null;
+                        const result = jsonData.results.bindings[0];
+                        const description = result.description ? result.description.value : null;
+                        const taxon = result.taxon ? result.taxon.value : null;
+                        const primaryTopicUrl = result.primaryTopicUrl ? result.primaryTopicUrl.value : null;
                         resolve({ description, taxon, primaryTopicUrl });
                     }
                 } catch (error) {
@@ -95,6 +86,7 @@ async function fetchPlantInfo(plantName) {
         });
     });
 }
+
 
 
 
