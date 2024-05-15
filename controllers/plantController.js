@@ -46,6 +46,50 @@ async function postPlant(req, res) {
     }
 }
 
+async function syncPlant(req, res) {
+    try {
+        let plants = JSON.parse(req.body.data)
+        const files = req.files
+        const fileBase64 = []
+        if(req.body.camera){
+            console.log(req.body.camera)
+            let camera = req.body.camera
+            const matches = camera.match(/^data:(.+);base64,(.*)$/);
+            if (!matches || matches.length !== 3) {
+                throw new Error("Invalid base64 data");
+            }
+            const base64 = {
+                img_type: matches[1], // This captures the MIME type (e.g., 'image/webp')
+                img_data: Buffer.from(matches[2], 'base64')  // This captures the actual base64 buffer encoded data (without MIME type and prefix)
+
+            }
+            fileBase64.push(base64)
+        }
+        for (let i = 0; i < files.length; i++) {
+            const image_data = Buffer.from(files[i].buffer, 'base64')
+            const image_type = files[i].mimetype
+            const base64Data = {img_type: image_type, img_data: image_data}
+
+            fileBase64.push(base64Data)
+        }
+        console.log(fileBase64)
+        let plant
+        let updatedPlants = []
+        for (const p of plants) {
+            plant = await listNewPlant(req.user.id, p, fileBase64)
+            updatedPlants.push(plant)
+        }
+
+
+        // console.log(plant)
+
+        res.status(200).send(updatedPlants)
+
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
 function getChats(req, res) {
     res.render('plant/plant_detail', {user: req.user, auth: req.isLoggedIn})
 }
@@ -86,5 +130,6 @@ module.exports = {
     postPlant,
     getChats,
     getMyPlant,
-    getAllPlants
+    getAllPlants,
+    syncPlant
 }

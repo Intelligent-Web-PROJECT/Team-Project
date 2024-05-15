@@ -15,26 +15,26 @@ async function searchUser(filter) {
     return User.findOne(filter);
 }
 
-async function listNewPlant(user, plant, photos, location){
+async function listNewPlant(user, plant, photos){
     try {
-
+        const { name, description, height, spread, flowers, leaves, fruits, sunExposure, flowerColour, longitude, latitude } = plant;
         const newPlant = new Plant({
-            name: plant.name,
+            name: name,
             user: user,
-            description: plant.description,
+            description: description,
             location: {
-                latitude: plant.latitude,
-                longitude: plant.longitude
+                latitude: latitude,
+                longitude: longitude
             },
-            height: plant.height,
-            spread: plant.spread,
+            height: height,
+            spread: spread,
             photos: photos,
             characteristics: {
-                have_flowers: plant.flowers,
-                have_leaves: plant.leaves,
-                have_fruits: plant.fruits,
-                sun_exposure: plant.sunExposure,
-                flower_colour: plant.flowerColour
+                have_flowers: flowers,
+                have_leaves: leaves,
+                have_fruits: fruits,
+                sun_exposure: sunExposure,
+                flower_colour: flowerColour
             }
         })
 
@@ -43,6 +43,10 @@ async function listNewPlant(user, plant, photos, location){
     } catch (error) {
         console.log(error)
     }
+}
+
+async function syncPlants(plants) {
+    return await Plant.insertMany(plants)
 }
 
 // Function to find all plants by a specific user ID
@@ -94,5 +98,6 @@ module.exports = {
     findAllPlantsByUserId,
     findAllPlants,
     addComment,
-    getComments
+    getComments,
+    syncPlants
 };

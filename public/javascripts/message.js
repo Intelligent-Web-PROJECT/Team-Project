@@ -24,8 +24,11 @@ function init() {
 
     socket.on('chat', function (room, userId, chatText) {
         console.log('Received message:', chatText);
-
-        writeNewMessage(chatText, userId);
+        if (navigator.onLine) {
+            writeNewMessage(chatText, userId);
+        } else {
+            insertComment()
+        }
     });
 }
 

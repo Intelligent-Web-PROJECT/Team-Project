@@ -16,7 +16,7 @@ function insertPlantSighting (data,id){
     addRequest.onsuccess = (event) => {
         console.log("New plants sighting added to the database with id:", event.target.result);
         setTimeout(() => {
-            window.location.href = "/";
+            window.location.href = "/my-plants";
         }, 1000);
     };
     addRequest.onerror = (event) => {
@@ -24,34 +24,30 @@ function insertPlantSighting (data,id){
     }
 }
 
-// /**
-//  * Insert new comment of a sighting into IndexDB
-//  * @param data comment
-//  * @param id sighting id
-//  */
-// function insertComment (data,id){
-//     console.log("insertComment",insertComment)
-//     const birtWatchingIDB = requestIndexedDB.result
-//     const transaction = birtWatchingIDB.transaction(["comment"],"readwrite")
-//     const commentStore = transaction.objectStore("comment")
-//
-//     let parsedData = JSON.parse(data)
-//
-//     let comment = {
-//         idBird: id,
-//         content: parsedData.content,
-//         nickname: parsedData.nickname,
-//         datetime: Date.now()
-//     };
-//
-//     const addRequest = commentStore.add(comment)
-//     addRequest.onsuccess = (event) => {
-//         console.log("New Comment added to database with id:", event.target.result);
-//     };
-//     addRequest.onerror = (event) => {
-//         console.error("Error Comment new sighting to database:", event.target.error)
-//     }
-// }
+
+function insertComment (data,id){
+    console.log("insertComment",insertComment)
+    const birtWatchingIDB = requestIndexedDB.result
+    const transaction = birtWatchingIDB.transaction(["comment"],"readwrite")
+    const commentStore = transaction.objectStore("comment")
+
+    let parsedData = JSON.parse(data)
+
+    let comment = {
+        idBird: id,
+        content: parsedData.content,
+        nickname: parsedData.nickname,
+        datetime: Date.now()
+    };
+
+    const addRequest = commentStore.add(comment)
+    addRequest.onsuccess = (event) => {
+        console.log("New Comment added to database with id:", event.target.result);
+    };
+    addRequest.onerror = (event) => {
+        console.error("Error Comment new sighting to database:", event.target.error)
+    }
+}
 
 
 function getPlantSighting() {
@@ -72,7 +68,6 @@ function getPlantSighting() {
                 }
                 cursor.continue();
             } else {
-                // resolving case now
                 resolve(result);
             }
         }
@@ -80,34 +75,32 @@ function getPlantSighting() {
 }
 
 
-/**
- //  * Getting all the comments From IndexDB
- //  */
-// function getComment() {
-//     return new Promise((resolve, reject) => {
-//         const birtWatchingIDB = requestIndexedDB.result;
-//         const transaction = birtWatchingIDB.transaction(["comment"], "readwrite");
-//         const commentStore = transaction.objectStore("comment");
-//         const cursorRequest = commentStore.openCursor();
-//         const result = [];
-//
-//         cursorRequest.onsuccess = function(event) {
-//             const cursor = event.target.result;
-//             if (cursor) {
-//                 const data = cursor.value;
-//                 result.push(data)
-//                 cursor.continue();
-//             } else {
-//
-//                 resolve(result);
-//             }
-//         };
-//
-//         cursorRequest.onerror = function(event) {
-//             reject(event.target.error);
-//         };
-//     });
-// }
+
+function getComment() {
+    return new Promise((resolve, reject) => {
+        const birtWatchingIDB = requestIndexedDB.result;
+        const transaction = birtWatchingIDB.transaction(["comment"], "readwrite");
+        const commentStore = transaction.objectStore("comment");
+        const cursorRequest = commentStore.openCursor();
+        const result = [];
+
+        cursorRequest.onsuccess = function(event) {
+            const cursor = event.target.result;
+            if (cursor) {
+                const data = cursor.value;
+                result.push(data)
+                cursor.continue();
+            } else {
+
+                resolve(result);
+            }
+        };
+
+        cursorRequest.onerror = function(event) {
+            reject(event.target.error);
+        };
+    });
+}
 
 
 /**

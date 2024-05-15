@@ -1,32 +1,37 @@
 <%- include("../components/header") %>
 <%- include("../components/navbar") %>
-
-<h1>My Plants</h1>
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <div>
-        <label for="filter" class="form-label">Filter:</label>
-        <select class="form-select" id="filter">
-            <option selected>Select</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-        </select>
-    </div>
-    <a href="/list-plant" class="btn btn-success">Add Plant</a>
-</div>
-<div class="list-group">
-    <% plants.forEach(function(plant) { %>
-        <a href="/plants/<%= plant._id %>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-            <div>
-                <% if (plant.photos.length > 0) { %>
-                    <img src="data:<%= plant.photos[0]?.img_type %>;base64,<%= Buffer.from(plant.photos[0]?.img_data ?? "").toString('base64') %>" class="card-img-top" alt="<%= plant.name %>" style="max-height: 100px; max-width: 100px">
-                <% } %>
-                <h5 class="mb-1"><%= plant.name %></h5>
-                <small>Location: <%= plant.location %></small><br>
-                <small>Added: <%= plant.createdAt.toDateString() %></small>
-            </div>
-            <a class="btn btn-primary" href="/plants/<%= plant._id %>"> View </a>
-        </a>
-    <% }); %>
-</div>
+<script src="/javascripts/index.js"></script>
 <script src="/javascripts/indexDb.js"></script>
+
+<div class="container">
+    <h1>My Plants</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <label for="filter" class="form-label">Filter:</label>
+            <select class="form-select" id="filter">
+                <option selected>Select</option>
+                <option value="1">Option 1</option>
+                <option value="2">Option 2</option>
+            </select>
+        </div>
+        <a href="/list-plant" class="btn btn-success">Add Plant</a>
+    </div>
+    <div class="list-group">
+        <% plants.forEach(function(plant) { %>
+            <a href="/plants/<%= plant._id %>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                <div>
+                    <% if (plant.photos.length > 0) { %>
+                        <img src="data:<%= plant.photos[0]?.img_type %>;base64,<%= Buffer.from(plant.photos[0]?.img_data ?? "").toString('base64') %>" class="card-img-top" alt="<%= plant.name %>" style="max-height: 100px; max-width: 100px">
+                    <% } %>
+                    <h5 class="mb-1"><%= plant.name %></h5>
+                    <small>Location: <%= plant.location %></small><br>
+                    <small>Added: <%= plant.createdAt.toDateString() %></small>
+                </div>
+                <a class="btn btn-primary" href="/plants/<%= plant._id %>"> View </a>
+            </a>
+        <% }); %>
+    </div>
+</div>
+
+
 
