@@ -1,27 +1,15 @@
-const {User, Plant, Comment} = require('./models')
+const {Plant, Comment} = require('./models')
 
 const mongoose = require('mongoose')
 
-
-async function getAllUsers() {
-    return User.find();
-}
-
-async function getUserById(id) {
-    return User.findOne({_id: id});
-}
-
-async function searchUser(filter) {
-    return User.findOne(filter);
-}
-
-async function listNewPlant(user, plant, photos){
+async function listNewPlant(plant, photos){
     try {
-        const { name, description, height, spread, flowers, leaves, fruits, sunExposure, flowerColour, longitude, latitude } = plant;
+        const { name, nickname, description, date, height, spread, flowers, leaves, fruits, sunExposure, flowerColour, longitude, latitude } = plant;
         const newPlant = new Plant({
             name: name,
-            user: user,
+            nickname: nickname,
             description: description,
+            date: date,
             location: {
                 latitude: latitude,
                 longitude: longitude
@@ -51,12 +39,12 @@ async function syncPlants(plants) {
 
 // Function to find all plants by a specific user ID
 async function findAllPlantsByUserId(userId) {
-    return Plant.find({ user: userId }).populate('user', 'username'); // Populate user details
+    return Plant.find({ user: userId })
 }
 
 // Function to find all plants in the database
 async function findAllPlants() {
-    return Plant.find().populate('user', 'username'); // Populate user details
+    return Plant.find()
 }
 
 async function addComment(plantId, userId, commentText) {
@@ -66,7 +54,7 @@ async function addComment(plantId, userId, commentText) {
             const newComment = new Comment({
                 plant: plantId,
                 comments: [{
-                    user: userId,
+                    nickname: userId,
                     text: commentText,
                     time: Date.now()
                 }]
@@ -74,7 +62,7 @@ async function addComment(plantId, userId, commentText) {
             await newComment.save()
         } else {
             existingComment.comments.push({
-                user: userId,
+                nickname: userId,
                 text: commentText,
                 time: Date.now()
             })
@@ -91,9 +79,6 @@ async function getComments(plantId) {
 
 
 module.exports = {
-    getAllUsers,
-    getUserById,
-    searchUser,
     listNewPlant,
     findAllPlantsByUserId,
     findAllPlants,

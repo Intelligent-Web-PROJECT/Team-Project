@@ -25,12 +25,13 @@ function init() {
     socket.on('chat', function (room, userId, chatText) {
         console.log('Received message:', chatText);
         let formData = new FormData()
-        formData.append('plant', room)
-        formData.append('user', userId)
-        formData.append('text', chatText)
+
 
         if (navigator.onLine) {
             writeNewMessage(chatText, userId);
+            formData.append('plant', room)
+            formData.append('nickname', userId)
+            formData.append('text', chatText)
             fetch('/addMessage', {
                 method: 'POST',
                 body: formData
@@ -46,13 +47,6 @@ function init() {
                 });
 
         } else {
-            console.log('inside offline text')
-            let comments = {}
-            for (const [key, value] of formData.entries) {
-                comments[key] = value
-            }
-            writeNewMessage(chatText, userId)
-            insertComment(comments, -1)
         }
     });
 }
@@ -62,7 +56,7 @@ function connectToRoom() {
     var url = window.location.href;
     var parts = url.split("/");
     roomNo = parts[parts.length - 1];
-    name = document.getElementById('username').textContent;
+    name = sessionStorage.getItem('nickName')
     socket.emit('create or join', roomNo, name);
     console.log('Attempting to join room:', roomNo, 'as', name);
 }

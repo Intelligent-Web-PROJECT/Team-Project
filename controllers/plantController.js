@@ -1,9 +1,9 @@
-const {listNewPlant, findAllPlants, findAllPlantsByUserId} = require("../models/mongodb");
+const {listNewPlant, findAllPlants, findAllPlantsByUserId, addComment} = require("../models/mongodb");
 const {getLocation} = require("../public/javascripts/location");
 const {sortItemsByDistance, calculateDistance} = require("../util/locationUtils");
 
 function listPlant(req, res) {
-    res.render('plant/list_plant',{user: req.user, auth: req.isLoggedIn})
+    res.render('plant/list_plant',{})
 }
 
 async function postPlant(req, res) {
@@ -20,7 +20,7 @@ async function postPlant(req, res) {
                 throw new Error("Invalid base64 data");
             }
             const base64 = {
-                img_type: matches[1], // This captures the MIME type (e.g., 'image/webp')
+                img_type: matches[1], // This captures the MIME type
                 img_data: Buffer.from(matches[2], 'base64')  // This captures the actual base64 buffer encoded data (without MIME type and prefix)
 
             }
@@ -36,7 +36,7 @@ async function postPlant(req, res) {
         console.log(fileBase64)
 
 
-        const plant = await listNewPlant(req.user.id, req.body, fileBase64)
+        const plant = await listNewPlant(req.body, fileBase64)
 
         console.log(plant)
 
@@ -95,25 +95,25 @@ function getChats(req, res) {
     res.render('plant/plant_detail', {user: req.user, auth: req.isLoggedIn})
 }
 
-function addMessage(req, res) {
-
+async function addMessage(req, res) {
+    const plant = req.body.plant
+    const nickname = req.body.nickname
+    const text = req.body.text
+    await addComment(plant, nickname, text)
 }
 
 async function getMyPlant(req, res) {
     try {
-        if (!req.isLoggedIn) {
-            res.redirect('/login')
-        }
         const location = await getLocation()
 
 
-        const myPlants = await findAllPlantsByUserId(req.user.id);
-        myPlants.forEach(plant => {
-            const distance = calculateDistance(location.latitude, location.longitude, plant.location.latitude, plant.location.longitude)
-            console.log(distance)
-            plant.distance = distance.toFixed(2)
-        })
-        res.render('plant/myPlants', {plants: myPlants, user: req.user, auth: req.isLoggedIn});
+        // const myPlants = await findAllPlantsByUserId(req.user.id);
+        // myPlants.forEach(plant => {
+        //     const distance = calculateDistance(location.latitude, location.longitude, plant.location.latitude, plant.location.longitude)
+        //     console.log(distance)
+        //     plant.distance = distance.toFixed(2)
+        // })
+        // res.render('plant/myPlants', {plants: myPlants});
     } catch (error) {
         console.log(error);
     }
@@ -141,7 +141,7 @@ async  function getAllPlants(req, res){
                 }
             });
         }
-        res.render('plant/allPlants', { plants, user: req.user, auth: req.isLoggedIn, message});
+        res.render('plant/allPlants', { plants});
     } catch (error) {
         console.error('Error fetching all plants:', error);
     }

@@ -13,6 +13,11 @@
 <div class="landing-slogan text-center py-4">
     <h1>Welcome to FloraScan</h1>
     <p class="mb-0">Discover the Beauty of Flora, One Plant at a Time</p>
+    <div class="container text-center my-4">
+        <input class="form-control w-25 m-auto mb-3" id="nickname" placeholder="Enter nickname">
+        <button class="btn btn-lg" onclick="nicknameButton()">Start Exploring</button>
+    </div>
+
 </div>
 <!-- End of Slogan/Banner -->
 
@@ -69,3 +74,15 @@
 </div>
 <!-- End of Start Exploring Button -->
 <script src="/javascripts/indexDb.js"></script>
+<script>
+    function nicknameButton() {
+        let nickname = document.getElementById('nickname');
+        let name = nickname.value
+        sessionStorage.setItem('nickName', name)
+        if(sessionStorage.getItem('nickName')) {
+            window.location.href='/allPlants'
+        } else {
+            alert("Please Field Your Nick Name Before Start.")
+        }
+    }
+</script>
