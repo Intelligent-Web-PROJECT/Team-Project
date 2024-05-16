@@ -1,9 +1,8 @@
 const mongoose = require('mongoose')
 
 const plantSchema = new mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+    nickname: {
+        type: String,
         required: true
     },
     name: {
@@ -14,6 +13,9 @@ const plantSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    date: {
+      type: Date
     },
     location: {
         latitude: {

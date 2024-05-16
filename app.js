@@ -8,11 +8,8 @@ const flash = require('express-flash');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var authRouters = require('./routes/authRoutes');
 
 
-const {sessionSetup, passportStrategy, passportSerializeUser, passportDeserializeUser, sessionErrorHandler} = require("./auth/passportAuth");
-const {isAuthenticated, authInfo} = require("./middlewares/auth");
 
 var app = express();
 
@@ -35,22 +32,8 @@ app.use("/javascripts", express.static(path.join(__dirname, "node_modules/bootst
 app.use("/javascripts", express.static(path.join(__dirname, "node_modules/jquery/dist")))
 
 
-app.use(sessionSetup);
-app.use(passport.authenticate('session'))
-/* Session Error Handler */
-app.use(sessionErrorHandler);
-
-app.use(flash())
-
-/* Passport setup */
-passport.use(passportStrategy)
-passport.serializeUser(passportSerializeUser)
-passport.deserializeUser(passportDeserializeUser)
-
-
-app.use('/', authInfo, indexRouter);
-app.use('/', authRouters);
-app.use('/', isAuthenticated, usersRouter);
+app.use('/', indexRouter);
+app.use('/', usersRouter);
 
 
 // catch 404 and forward to error handler
