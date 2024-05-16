@@ -120,7 +120,7 @@ function updatePlant (data){
         for (const plant of data) {
             console.log('inside for loop')
             console.log(`Deleting plant ${plant._id}`)
-            const deletePlant = await plantStore.delete(plant._id)
+            const deletePlant = await plantStore.delete(plant.name)
 
         }
     }

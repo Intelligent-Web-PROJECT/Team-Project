@@ -1,5 +1,6 @@
 const {listNewPlant, findAllPlants, findAllPlantsByUserId} = require("../models/mongodb");
 const {getLocation} = require("../public/javascripts/location");
+const {sortItemsByDistance, calculateDistance} = require("../util/locationUtils");
 
 function listPlant(req, res) {
     res.render('plant/list_plant',{user: req.user, auth: req.isLoggedIn})
@@ -94,9 +95,24 @@ function getChats(req, res) {
     res.render('plant/plant_detail', {user: req.user, auth: req.isLoggedIn})
 }
 
+function addMessage(req, res) {
+
+}
+
 async function getMyPlant(req, res) {
     try {
+        if (!req.isLoggedIn) {
+            res.redirect('/login')
+        }
+        const location = await getLocation()
+
+
         const myPlants = await findAllPlantsByUserId(req.user.id);
+        myPlants.forEach(plant => {
+            const distance = calculateDistance(location.latitude, location.longitude, plant.location.latitude, plant.location.longitude)
+            console.log(distance)
+            plant.distance = distance.toFixed(2)
+        })
         res.render('plant/myPlants', {plants: myPlants, user: req.user, auth: req.isLoggedIn});
     } catch (error) {
         console.log(error);
@@ -107,6 +123,12 @@ async function getMyPlant(req, res) {
 async  function getAllPlants(req, res){
     try {
         let plants = await findAllPlants();
+        const location = await getLocation()
+        plants.forEach(plant => {
+            const distance = calculateDistance(location.latitude, location.longitude, plant.location.latitude, plant.location.longitude)
+            console.log(distance)
+            plant.distance = distance.toFixed(2)
+        })
         let message='';
         if (plants.length===0) {
             // res.render('plant/allPlants', { plants: [], message: "No plants found." });
@@ -131,5 +153,6 @@ module.exports = {
     getChats,
     getMyPlant,
     getAllPlants,
-    syncPlant
+    syncPlant,
+    addMessage
 }

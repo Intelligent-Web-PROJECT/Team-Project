@@ -82,12 +82,10 @@ document.addEventListener('DOMContentLoaded', function (){
 
 
     flowerYes.addEventListener('change', () => {
+        console.log('inside flower yes')
         flowerColour.disabled = !flowerYes.checked;
     })
 
-    flowerNo.addEventListener('change', () => {
-        flowerColour.disabled = !flowerNo.checked
-    })
 
 
     uploadBtn.addEventListener("click", function() {
@@ -109,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function (){
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         // Create an image element for each file
-                        const imgElement = `<img src="${e.target.result}" class="img-thumbnail" style="margin-right: 10px;">`;
+                        const imgElement = `<img src="${e.target.result}" class="img-thumbnail" style="margin-right: 10px; max-height: 500px">`;
                         imagePreview.innerHTML += imgElement; // Append new image element to the preview container
                     };
                     reader.readAsDataURL(file); // Read the file as a Data URL
@@ -196,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function (){
                 formData.append('photos', imageUpload.files[i]);
             }
         }
-let plants={};
+        let plants={};
         for (const [key, value] of formData.entries()) {
             plants[key] = value;
         }

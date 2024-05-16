@@ -34,10 +34,11 @@ function insertComment (data,id){
     let parsedData = JSON.parse(data)
 
     let comment = {
-        idBird: id,
-        content: parsedData.content,
-        nickname: parsedData.nickname,
-        datetime: Date.now()
+        idText: id,
+        plant: parsedData.plant,
+        text: parsedData.text,
+        user: parsedData.user,
+        time: Date.now()
     };
 
     const addRequest = commentStore.add(comment)

@@ -24,10 +24,35 @@ function init() {
 
     socket.on('chat', function (room, userId, chatText) {
         console.log('Received message:', chatText);
+        let formData = new FormData()
+        formData.append('plant', room)
+        formData.append('user', userId)
+        formData.append('text', chatText)
+
         if (navigator.onLine) {
             writeNewMessage(chatText, userId);
+            fetch('/addMessage', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network error")
+                }
+                return response.text()
+            })
+                .catch(error => {
+                    console.log(error);
+                });
+
         } else {
-            insertComment()
+            console.log('inside offline text')
+            let comments = {}
+            for (const [key, value] of formData.entries) {
+                comments[key] = value
+            }
+            writeNewMessage(chatText, userId)
+            insertComment(comments, -1)
         }
     });
 }
@@ -77,6 +102,7 @@ function writeNewMessage(text, userId) {
 }
 
 function sendMessage() {
+    console.log('inside send message')
     let chatText = chatInput.value
     if (chatText.trim() !== '') {
         socket.emit('chat',roomNo, name, chatText)
