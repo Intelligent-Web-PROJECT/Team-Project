@@ -12,8 +12,6 @@ exports.init = function(io) {
             });
 
             socket.on('chat', async function (room, userId, chatText) {
-
-                await addComment(room, userId, chatText)
                 io.sockets.to(room).emit('chat', room, userId, chatText)
             })
 

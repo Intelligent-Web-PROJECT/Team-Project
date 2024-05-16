@@ -103,17 +103,16 @@
 <!-- End of Design Block -->
 
 <!--Comment Section Start-->
-<p hidden="hidden" id="username"><%= user.username %></p>
 <button class="btn btn-primary" id="viewChats" onclick="connectToRoom()">View Chats</button>
 <div class="chat-container container" id="chat-container" style="display: none">
     <h3 class="text-muted">Chat </h3>
     <div class="chat-section p-3">
         <div class="history" id="history">
             <% plantComment?.comments.forEach(comment => { %>
-                <div class="chat-message <%= comment.user === user.username ? 'user-message' : 'other-message' %>">
+                <div class="chat-message other-message">
                     <i class="fa-regular fa-user profile-icon"></i>
                     <div class="message-content">
-                        <p class="message-sender"><%= comment.user === user.username ? 'Me' : comment.user %></p>
+                        <p class="message-sender"><%= comment.nickname%></p>
                         <p class="message-text"><%= comment.text %></p>
                     </div>
                 </div>

@@ -18,7 +18,7 @@ function deg2rad(deg) {
 function sortItemsByDistance(myLatitude, myLongitude, items) {
     // Calculate distance for each item and add it as a new property
     const itemsWithDistance = items.map(item => {
-        const distance = calculateDistance(myLatitude, myLongitude, item.latitude, item.longitude);
+        const distance = calculateDistance(myLatitude, myLongitude, item.location.latitude, item.location.longitude);
         return { ...item, distance };
     });
 
@@ -27,5 +27,6 @@ function sortItemsByDistance(myLatitude, myLongitude, items) {
 }
 
 module.exports = {
-    sortItemsByDistance
+    sortItemsByDistance,
+    calculateDistance
 };

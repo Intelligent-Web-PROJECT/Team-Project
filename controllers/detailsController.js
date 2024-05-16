@@ -5,7 +5,6 @@ const https = require('https');
 // Function to render plant details page
 async function getPlantDetails(req, res) {
     try {
-        const user = req.user;
         const plantId = req.params.plantId;
 
         // Get comments for the plant
@@ -22,7 +21,7 @@ async function getPlantDetails(req, res) {
         const dbpediaInfo = await fetchPlantInfo(plant.name);
 
         // Render the view with the plant details, authentication status, and DBpedia information
-        res.render('plant/plant_details', { plant, auth: req.isLoggedIn, user, plantComment, dbpediaInfo });
+        res.render('plant/plant_details', { plant, plantComment, dbpediaInfo });
     } catch (error) {
         console.error('Error fetching and rendering plant details:', error);
         res.status(500).json({ error: 'Error fetching and rendering plant details' });

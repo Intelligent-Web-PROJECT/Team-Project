@@ -1,4 +1,18 @@
 document.addEventListener('DOMContentLoaded', function (){
+
+    const nicknameField = document.getElementById('nickname');
+    const nickname = sessionStorage.getItem('nickName');
+    if (nicknameField && nickname) {
+        nicknameField.value = nickname;
+    }
+
+    const unknownBtn = document.getElementById('unknown')
+    const uncertainBtn = document.getElementById('uncertain')
+
+    unknownBtn.addEventListener('click', ()=> {
+
+    })
+
     const uploadBtn = document.getElementById('uploadBtn')
     const cameraBtn = document.getElementById('clickPicBtn')
     const submitBtn = document.getElementById('submitBtn')
@@ -14,13 +28,27 @@ document.addEventListener('DOMContentLoaded', function (){
     const height = document.getElementById('height')
     const spread = document.getElementById('spread')
     const flowerColour = document.getElementById('colour')
+    const date = document.getElementById('date')
 
     const flowerYes = document.getElementById('flowerYes')
-    const flowerNo = document.getElementById("flowerNo");
     const leavesYes = document.getElementById('leavesYes')
     const fruitsYes = document.getElementById('fruitsYes')
 
     const imagePreview = document.getElementById('imagePreview')
+
+    unknownBtn.addEventListener('click', ()=> {
+        name.value = 'Unknown'
+    })
+
+    uncertainBtn.addEventListener('click', ()=> {
+        let uncertainText = name.value
+        if (uncertainText !== '') {
+            uncertainText += '( Uncertain )'
+            name.value = uncertainText
+        }
+    })
+
+
     let plantLatitude = 0
     let plantLongitude = 0
 
@@ -81,14 +109,6 @@ document.addEventListener('DOMContentLoaded', function (){
 
 
 
-    flowerYes.addEventListener('change', () => {
-        flowerColour.disabled = !flowerYes.checked;
-    })
-
-    flowerNo.addEventListener('change', () => {
-        flowerColour.disabled = !flowerNo.checked
-    })
-
 
     uploadBtn.addEventListener("click", function() {
         imageUpload.click(); // Triggers the file input click
@@ -109,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function (){
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         // Create an image element for each file
-                        const imgElement = `<img src="${e.target.result}" class="img-thumbnail" style="margin-right: 10px;">`;
+                        const imgElement = `<img src="${e.target.result}" class="img-thumbnail" style="margin-right: 10px; max-height: 500px">`;
                         imagePreview.innerHTML += imgElement; // Append new image element to the preview container
                     };
                     reader.readAsDataURL(file); // Read the file as a Data URL
@@ -173,16 +193,16 @@ document.addEventListener('DOMContentLoaded', function (){
     submitBtn.addEventListener('click', () => {
         let formData = new FormData();
         formData.append('name', name.value);
+        formData.append('nickname', nickname)
         formData.append('description', description.value);
+        formData.append('date', date.value)
         formData.append('height', height.value);
         formData.append('spread', spread.value);
         formData.append('flowers', flowerYes.checked);
         formData.append('leaves', leavesYes.checked);
         formData.append('fruits', fruitsYes.checked);
         formData.append('sunExposure', getSunExposureValue());
-        if (flowerYes.checked) {
-            formData.append('flowerColour', flowerColour.value);
-        }
+        formData.append('flowerColour', flowerColour.value);
         formData.append('longitude', plantLongitude)
         formData.append('latitude', plantLatitude)
         if (base64 !== null) {
@@ -196,21 +216,29 @@ document.addEventListener('DOMContentLoaded', function (){
                 formData.append('photos', imageUpload.files[i]);
             }
         }
-
-        fetch('list-plant', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                window.location.href = '/my-plants'
-                return response.text()
+        let plants={};
+        for (const [key, value] of formData.entries()) {
+            plants[key] = value;
+        }
+        if (navigator.onLine){
+            fetch('list-plant', {
+                method: 'POST',
+                body: formData
             })
-            .catch(error => {
-                console.log(error);
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    window.location.href = '/allPlants'
+                    return response.text()
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+        else {
+            insertPlantSighting(plants,-1);
+        }
     });
 
 

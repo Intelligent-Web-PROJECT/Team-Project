@@ -1,17 +1,19 @@
 <%- include("../components/header") %>
 <%- include("../components/navbar") %>
-
-<div class="container">
-    <div class="row">
+<script>
+    let nickname = sessionStorage.getItem('nickName')
+</script>
+<div class="container mt-5">
+    <div class="row border-1 rounded-3 shadow p-4">
         <div class="col">
             <div class="list-item p-4">
                 <h3 class="text-muted fs-4 mb-4">Add Plant</h3>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3 d-flex align-items-center">
-                            <label class="form-label">Upload Images </label>
+                            <label class="form-label list-form-label">Upload Images: </label>
                             <div class="d-flex">
-                                <button class="btn btn-primary me-2" id="uploadBtn">Upload</button>
+                                <button class="btn btn-primary me-2 mx-2" id="uploadBtn">Upload</button>
                                 <button class="btn btn-success" id="clickPicBtn">Click a picture</button>
                                 <input type="file" id="imageUpload" name="imageUpload" accept="image/*" multiple style="display: none">
                             </div>
@@ -19,29 +21,43 @@
                         </div>
 
                         <div class="mb-3 d-flex align-items-center formField">
-                            <label for="name" class="form-label me-3 formLabel">Name</label>
-                            <input type="text" class="form-control formInput" id="name" required>
+                            <label for="name" class="form-label list-form-label me-3 formLabel">Name</label>
+                            <input type="text" class="form-control formInput list-form-control" id="name" required>
+                        </div>
+                        <div class="mb-3 d-flex align-items-center formField">
+                            <button class="btn btn-primary me-2 mx-2" id="unknown">Unknown</button>
+                            <button class="btn btn-primary" id="uncertain">Uncertain</button>
+                        </div>
+
+
+                        <div class="mb-3 d-flex align-items-center formField">
+                            <label for="nickname" class="form-label list-form-label me-3 formLabel">User Nickname</label>
+                            <input type="text" class="form-control formInput list-form-control" id="nickname" disabled>
                         </div>
 
                         <div class="mb-3 d-flex align-items-center formField">
-                            <label for="description" class="form-label me-3 formLabel">Description</label>
-                            <textarea class="form-control formInput" id="description" rows="3" required></textarea>
+                            <label for="description" class="form-label list-form-label me-3 formLabel">Description</label>
+                            <textarea class="form-control formInput list-form-control" id="description" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-4 d-flex align-items-center formField">
+                            <label for="date" class="form-label list-form-label me-3 formLabel">Date:</label>
+                            <input type="date" class="form-control formInput" id="date" required>
                         </div>
 
                         <div class="mb-3 row">
                             <div class="col-md-6">
-                                <label for="height" class="form-label">Plant Height:</label>
-                                <input type="text" class="form-control" id="height" required>
+                                <label for="height" class="form-label list-form-label">Plant Height (in cm approx.):</label>
+                                <input type="text" class="form-control list-form-control" id="height" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="spread" class="form-label">Plant Spread:</label>
-                                <input type="text" class="form-control" id="spread" required>
+                                <label for="spread" class="form-label list-form-label">Plant Spread (in cm approx.):</label>
+                                <input type="text" class="form-control list-form-control" id="spread" required>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 ">
                         <p class="p-1">Image preview</p>
-                        <div id="imagePreview" class="p-1"></div>
+                        <div id="imagePreview" class="p-1 mh-50"></div>
                         <p class="text-muted mt-2" id="fileName"></p>
                         <div class="webcam-container">
                             <div class="webcam-container" style="position: relative;">
@@ -51,57 +67,55 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col">
-                    <h3 class="text-muted mb-3">Characteristics:</h3>
-
+                <hr/>
+                <div class="col mt-5">
                     <div class="mb-3">
-                        <label for="flowerRadio" class="form-label">Does the plant have flowers?</label>
+                        <label for="flowerRadio" class="form-label list-form-label">Does the plant have flowers?</label>
                         <div class="btn-group">
-                            <input type="radio" class="btn-check " name="flowerRadio" id="flowerYes" autocomplete="off" checked />
+                            <input type="radio" class="btn-check" name="flowerRadio" id="flowerYes" autocomplete="off" checked />
                             <label class="btn btn-primary" for="flowerYes" data-mdb-ripple-init>Yes</label>
 
-                            <input type="radio" class="btn-check " name="flowerRadio" id="flowerNo" autocomplete="off" />
+                            <input type="radio" class="btn-check" name="flowerRadio" id="flowerNo" autocomplete="off" />
                             <label class="btn btn-primary" for="flowerNo" data-mdb-ripple-init>No</label>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="leavesRadio" class="form-label">Does the plant have leaves?</label>
+                        <label for="leavesRadio" class="form-label list-form-label">Does the plant have leaves?</label>
                         <div class="btn-group">
-                            <input type="radio" class="btn-check " name="leavesRadio" id="leavesYes" autocomplete="off" checked />
+                            <input type="radio" class="btn-check" name="leavesRadio" id="leavesYes" autocomplete="off" checked />
                             <label class="btn btn-primary" for="leavesYes" data-mdb-ripple-init>Yes</label>
 
-                            <input type="radio" class="btn-check " name="leavesRadio" id="leavesNo" autocomplete="off" />
+                            <input type="radio" class="btn-check" name="leavesRadio" id="leavesNo" autocomplete="off" />
                             <label class="btn btn-primary" for="leavesNo" data-mdb-ripple-init>No</label>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="fruitsRadio" class="form-label">Does the plant have fruits or seeds?</label>
+                        <label for="fruitsRadio" class="form-label list-form-label">Does the plant have fruits or seeds?</label>
                         <div class="btn-group">
-                            <input type="radio" class="btn-check " name="fruitsRadio" id="fruitsYes" autocomplete="off" checked />
-                            <label class="btn btn-primary " for="fruitsYes" data-mdb-ripple-init>Yes</label>
+                            <input type="radio" class="btn-check" name="fruitsRadio" id="fruitsYes" autocomplete="off" checked />
+                            <label class="btn btn-primary" for="fruitsYes" data-mdb-ripple-init>Yes</label>
 
-                            <input type="radio" class="btn-check " name="fruitsRadio" id="fruitsNo" autocomplete="off" />
+                            <input type="radio" class="btn-check" name="fruitsRadio" id="fruitsNo" autocomplete="off" />
                             <label class="btn btn-primary" for="fruitsNo" data-mdb-ripple-init>No</label>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="sunRadio" class="form-label">What is the sun exposure in that area?</label>
+                        <label for="sunRadio" class="form-label list-form-label">What is the sun exposure in that area?</label>
                         <div class="btn-group">
-                            <input type="radio" class="btn-check " name="sunRadio" id="sunFull" autocomplete="off" value="Full sun" checked />
+                            <input type="radio" class="btn-check" name="sunRadio" id="sunFull" autocomplete="off" value="Full sun" checked />
                             <label class="btn btn-primary" for="sunFull" data-mdb-ripple-init>Full sun</label>
-                            <input type="radio" class="btn-check " name="sunRadio" id="sunPartial" autocomplete="off" value="Partial shade" />
+                            <input type="radio" class="btn-check" name="sunRadio" id="sunPartial" autocomplete="off" value="Partial shade" />
                             <label class="btn btn-primary" for="sunPartial" data-mdb-ripple-init>Partial Shade</label>
 
-                            <input type="radio" class="btn-check " name="sunRadio" id="shadeFull" autocomplete="off" value="Full shade"/>
+                            <input type="radio" class="btn-check" name="sunRadio" id="shadeFull" autocomplete="off" value="Full shade"/>
                             <label class="btn btn-primary" for="shadeFull" data-mdb-ripple-init>Full shade</label>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="colour" class="form-label">What is the colour of the flowers?</label>
-                        <input type="text" class="form-control " id="colour" name="colour">
+                        <label for="colour" class="form-label list-form-label">What is the colour of the flowers? (If the plants doesn't have any flowers, type N/A)</label>
+                        <input type="text" class="form-control btn-group" id="colour" name="colour">
                     </div>
 
                     <div class="location-picker mb-3">
@@ -118,3 +132,5 @@
 </div>
 <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
 <script src="/javascripts/plantListing.js"></script>
+<script src="/javascripts/indexDb.js"></script>
+

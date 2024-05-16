@@ -1,40 +1,28 @@
-const {User, Plant, Comment} = require('./models')
+const {Plant, Comment} = require('./models')
 
 const mongoose = require('mongoose')
 
-
-async function getAllUsers() {
-    return User.find();
-}
-
-async function getUserById(id) {
-    return User.findOne({_id: id});
-}
-
-async function searchUser(filter) {
-    return User.findOne(filter);
-}
-
-async function listNewPlant(user, plant, photos, location){
+async function listNewPlant(plant, photos){
     try {
-
+        const { name, nickname, description, date, height, spread, flowers, leaves, fruits, sunExposure, flowerColour, longitude, latitude } = plant;
         const newPlant = new Plant({
-            name: plant.name,
-            user: user,
-            description: plant.description,
+            name: name,
+            nickname: nickname,
+            description: description,
+            date: date,
             location: {
-                latitude: plant.latitude,
-                longitude: plant.longitude
+                latitude: latitude,
+                longitude: longitude
             },
-            height: plant.height,
-            spread: plant.spread,
+            height: height,
+            spread: spread,
             photos: photos,
             characteristics: {
-                have_flowers: plant.flowers,
-                have_leaves: plant.leaves,
-                have_fruits: plant.fruits,
-                sun_exposure: plant.sunExposure,
-                flower_colour: plant.flowerColour
+                have_flowers: flowers,
+                have_leaves: leaves,
+                have_fruits: fruits,
+                sun_exposure: sunExposure,
+                flower_colour: flowerColour
             }
         })
 
@@ -45,14 +33,18 @@ async function listNewPlant(user, plant, photos, location){
     }
 }
 
+async function syncPlants(plants) {
+    return await Plant.insertMany(plants)
+}
+
 // Function to find all plants by a specific user ID
 async function findAllPlantsByUserId(userId) {
-    return Plant.find({ user: userId }).populate('user', 'username'); // Populate user details
+    return Plant.find({ user: userId })
 }
 
 // Function to find all plants in the database
 async function findAllPlants() {
-    return Plant.find().populate('user', 'username'); // Populate user details
+    return Plant.find()
 }
 
 async function addComment(plantId, userId, commentText) {
@@ -62,7 +54,7 @@ async function addComment(plantId, userId, commentText) {
             const newComment = new Comment({
                 plant: plantId,
                 comments: [{
-                    user: userId,
+                    nickname: userId,
                     text: commentText,
                     time: Date.now()
                 }]
@@ -70,7 +62,7 @@ async function addComment(plantId, userId, commentText) {
             await newComment.save()
         } else {
             existingComment.comments.push({
-                user: userId,
+                nickname: userId,
                 text: commentText,
                 time: Date.now()
             })
@@ -87,12 +79,10 @@ async function getComments(plantId) {
 
 
 module.exports = {
-    getAllUsers,
-    getUserById,
-    searchUser,
     listNewPlant,
     findAllPlantsByUserId,
     findAllPlants,
     addComment,
-    getComments
+    getComments,
+    syncPlants
 };
