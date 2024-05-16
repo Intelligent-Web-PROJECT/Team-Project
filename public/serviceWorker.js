@@ -4,7 +4,7 @@ self.addEventListener('install', event => {
     console.log('Installing plants service worker');
     event.waitUntil(caches.open(staticCacheName).then(cache => {
         console.log('Caching the file');
-        return cache.addAll(['/', '/my-plants',
+        return cache.addAll(['/', '/allPlants',
             '/stylesheets/landing.css',
             '/stylesheets/style.css',
             '/stylesheets/list_plant_style.css',
@@ -53,18 +53,16 @@ async function networkThenCache(event) {
 self.addEventListener('sync',  async (event) => {
     console.info('Event: Sync', event);
     try {
-        if (event.tag === 'sync-data') {
-            const plants = await getSightingFromIndexDB();
-            const result = await syncPlantData(plants);
-            console.log(result)
-            updatePlant(plants);
+        const plants = await getSightingFromIndexDB();
+        const result = await syncPlantData(plants);
+        console.log('Synced plants', plants)
+        await updatePlant(plants);
 
-            // const comments = await getCommentFromIndexDB();
-            // const commentResult = await syncCommentToMongoDB(comments);
-            // updateCommentUnsync(commentResult);
+        // const comments = await getCommentFromIndexDB();
+        // const commentResult = await syncCommentToMongoDB(comments);
+        // updateCommentUnsync(commentResult);
 
-            console.info('All Sync Done!');
-        }
+        console.info('All Sync Done!');
 
     } catch (error) {
         console.error('Sync Failed:', error);
@@ -105,25 +103,43 @@ async function getSightingFromIndexDB() {
     })
 }
 
-function updatePlant (data){
-    const request = indexedDB.open("plantRecognition",1);
+async function updatePlant(syncedPlants) {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("plantRecognition", 1);
 
-    request.onerror = function(event) {
-        reject(event.target.error);
-    };
-    request.onsuccess = async function (event) {
-        console.log('inside request onsuccess')
-        const plantDB = event.target.result
-        const transaction = plantDB.transaction(["plantsSighting"], "readwrite")
-        const plantStore = transaction.objectStore("plantsSighting")
+        request.onerror = (event) => reject(event.target.error);
+        request.onsuccess = (event) => {
+            const plantDB = event.target.result;
+            const transaction = plantDB.transaction(["plantsSighting"], "readwrite");
+            const plantStore = transaction.objectStore("plantsSighting");
 
-        for (const plant of data) {
-            console.log('inside for loop')
-            console.log(`Deleting plant ${plant._id}`)
-            const deletePlant = await plantStore.delete(plant.name)
-
-        }
-    }
+            const cursorRequest = plantStore.openCursor();
+            cursorRequest.onsuccess = (event) => {
+                const cursor = event.target.result;
+                if (cursor) {
+                    const plant = cursor.value;
+                    const syncedPlant = syncedPlants.find(p => p._id === plant._id);
+                    if (syncedPlant) {
+                        const deleteRequest = cursor.delete();
+                        deleteRequest.onsuccess = () => {
+                            console.log(`Deleted plant ${plant._id} from IndexedDB`);
+                        };
+                        deleteRequest.onerror = (event) => {
+                            console.error(`Failed to delete plant ${plant._id}`, event.target.error);
+                        };
+                    }
+                    cursor.continue();
+                } else {
+                    console.log('No more entries to iterate.');
+                    resolve();
+                }
+            };
+            cursorRequest.onerror = (event) => {
+                console.error('Failed to open cursor:', event.target.error);
+                reject(event.target.error);
+            };
+        };
+    });
 }
 
 async function syncPlantData(data) {
@@ -149,8 +165,7 @@ async function syncPlantData(data) {
             throw new Error('Failed to submit form');
         }
 
-        const result = await response.json();
-        return result;
+        return await response.json();
     } catch (error) {
         console.log('Error submitting form:', error);
         throw error;

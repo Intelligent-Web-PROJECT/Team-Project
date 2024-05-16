@@ -77,7 +77,7 @@ async function syncPlant(req, res) {
         let plant
         let updatedPlants = []
         for (const p of plants) {
-            plant = await listNewPlant(req.user.id, p, fileBase64)
+            plant = await listNewPlant(p, fileBase64)
             updatedPlants.push(plant)
         }
 
@@ -126,7 +126,6 @@ async  function getAllPlants(req, res){
         const location = await getLocation()
         plants.forEach(plant => {
             const distance = calculateDistance(location.latitude, location.longitude, plant.location.latitude, plant.location.longitude)
-            console.log(distance)
             plant.distance = distance.toFixed(2)
         })
         let message='';
