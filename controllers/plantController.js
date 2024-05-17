@@ -77,7 +77,7 @@ async function syncPlant(req, res) {
         let plant
         let updatedPlants = []
         for (const p of plants) {
-            plant = await listNewPlant(req.user.id, p, fileBase64)
+            plant = await listNewPlant(p, fileBase64)
             updatedPlants.push(plant)
         }
 
@@ -102,23 +102,24 @@ async function addMessage(req, res) {
     await addComment(plant, nickname, text)
 }
 
-async function getMyPlant(req, res) {
+async function syncComments(req, res) {
     try {
-        const location = await getLocation()
+        const comments = req.body;
+        console.log('inside sync comments controller')
+        const savedComments = await Promise.all(comments.map(async (comment) => {
+            const plant = comment.plant
+            const name = comment.user
+            const text = comment.text
+            const savedComment = await addComment(plant, name, text)
+            return {idText: comment.idText, ...savedComment.toObject()}
+        }));
 
-
-        // const myPlants = await findAllPlantsByUserId(req.user.id);
-        // myPlants.forEach(plant => {
-        //     const distance = calculateDistance(location.latitude, location.longitude, plant.location.latitude, plant.location.longitude)
-        //     console.log(distance)
-        //     plant.distance = distance.toFixed(2)
-        // })
-        // res.render('plant/myPlants', {plants: myPlants});
+        res.status(200).json(savedComments);
     } catch (error) {
-        console.log(error);
+        console.error('Error syncing comments:', error);
+        res.status(500).send(error);
     }
 }
-
 
 async  function getAllPlants(req, res){
     try {
@@ -126,7 +127,6 @@ async  function getAllPlants(req, res){
         const location = await getLocation()
         plants.forEach(plant => {
             const distance = calculateDistance(location.latitude, location.longitude, plant.location.latitude, plant.location.longitude)
-            console.log(distance)
             plant.distance = distance.toFixed(2)
         })
         let message='';
@@ -151,8 +151,8 @@ module.exports = {
     listPlant,
     postPlant,
     getChats,
-    getMyPlant,
     getAllPlants,
     syncPlant,
-    addMessage
+    addMessage,
+    syncComments
 }

@@ -12,40 +12,64 @@ async function getData() {
 }
 
 function addToView(plants) {
-    const plantContainer = document.querySelector('.list-group')
+    const plantContainer = document.getElementById('plant-list');
 
-    for (const plant of plants) {
-        const plantElement = document.createElement('a')
-        plantElement.setAttribute('href', `/plants/{$plant._id}`)
-        plantElement.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center'
-        console.log(plant.id)
-        let imageContent = ''
-        if (plant.photos && plant.photos.length > 0) {
-            const image = URL.createObjectURL(plant.photos[0])
-            imageContent = `<img src="${image}" class="card-img-top" alt="<%= plant.name %>" style="max-height: 100px; max-width: 100px">`
+    plants.forEach(plant => {
+        const plantElement = document.createElement('div');
+        plantElement.classList.add('col-md-4', 'mb-4', 'list-plants');
+        plantElement.dataset.distance = plant.distance;
+        plantElement.dataset.flowers = plant.flowers;
+
+        let imageContent = '';
+        if (plant.photos) {
+            const fileReader = new FileReader();
+            fileReader.onload = function(e) {
+                const image = e.target.result;
+                imageContent = `<img src="${image}" class="card-img-top" alt="${plant.name}">`;
+                plantElement.innerHTML = `
+                        <div class="card h-100 shadow">
+                            ${imageContent}
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">${plant.name}</h5>
+                                <p class="flex-grow-1 fw-medium fs-6">The plant has flowers: <span class="fw-normal">${plant.flowers === 'true' ? "Yes" : "No"}</span></p>
+                                <p class="flex-grow-1 fw-medium fs-6">Distance from you: <span class="fw-normal">${parseFloat(plant.distance).toFixed(2)} km</span></p>
+                                <p class="flex-grow-1 fw-medium fs-6">Sighted by: <span class="fw-normal">${plant.nickname}</span></p>
+                                <a href="/plants/${plant._id}" class="btn btn-primary mt-auto">View</a>
+                            </div>
+                        </div>
+                    `;
+                plantContainer.appendChild(plantElement);
+            };
+            fileReader.readAsDataURL(plant.photos);
+        } else {
+            plantElement.innerHTML = `
+                    <div class="card h-100 shadow">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${plant.name}</h5>
+                            <p class="flex-grow-1 fw-medium fs-6">The plant has flowers: <span class="fw-normal">${plant.flowers === 'true' ? "Yes" : "No"}</span></p>
+                            <p class="flex-grow-1 fw-medium fs-6">Distance from you: <span class="fw-normal">${parseFloat(plant.distance).toFixed(2)} km</span></p>
+                            <p class="flex-grow-1 fw-medium fs-6">Sighted by: <span class="fw-normal">${plant.nickname}</span></p>
+                            <a href="/plants/${plant._id}" class="btn btn-primary mt-auto">View</a>
+                        </div>
+                    </div>
+                `;
+            plantContainer.appendChild(plantElement);
         }
-        const location = plant.latitude +', '+ plant.longitude
-        plantElement.innerHTML = `
-                <div>
-                    ${imageContent}
-                    <h5 class="mb-1">${plant.name}</h5>
-                    <small>Location: ${location}</small><br>
-                    <small>Added: ${new Date().toDateString()}</small>
-                </div>
-                <a class="btn btn-primary" href="/plants/${plant._id}"> View </a>
-            `;
-        plantContainer.appendChild(plantElement)
-    }
+    });
 }
 
 function registerSync() {
-    if ('serviceWorker' in navigator && 'SyncManager' in window) {
-        navigator.serviceWorker.ready.then(function(registration) {
-            return registration.sync.register('sync-data');
-        }).then(function() {
-            console.log('Sync event registered');
-        }).catch(function(err) {
-            console.log('Unable to register sync', err);
-        });
-    }
+    new Promise(function (resolve, reject) {
+        Notification.requestPermission(function (result) {
+            resolve();
+        })
+    }).then(function () {
+        return navigator.serviceWorker.ready;
+    }).then(async function (reg) {
+        return reg.sync.register('sync-tag');
+    }).then(function () {
+        console.info('Sync registered');
+    }).catch(function (err) {
+        console.error('Failed to register sync:', err.message);
+    });
 }

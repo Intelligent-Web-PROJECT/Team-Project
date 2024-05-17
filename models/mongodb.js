@@ -59,14 +59,14 @@ async function addComment(plantId, userId, commentText) {
                     time: Date.now()
                 }]
             })
-            await newComment.save()
+            return await newComment.save()
         } else {
             existingComment.comments.push({
                 nickname: userId,
                 text: commentText,
                 time: Date.now()
             })
-            await existingComment.save()
+            return await existingComment.save()
         }
     }catch (error) {
         console.log(error)
@@ -77,6 +77,18 @@ async function getComments(plantId) {
     return await Comment.findOne({plant: plantId})
 }
 
+async function updatePlant(plantId, name) {
+    const filter = {
+        _id: plantId
+    }
+    const update = {
+        $set: {
+            name: name
+        }
+    }
+    return await Plant.updateOne(filter, update);
+}
+
 
 module.exports = {
     listNewPlant,
@@ -84,5 +96,6 @@ module.exports = {
     findAllPlants,
     addComment,
     getComments,
-    syncPlants
+    syncPlants,
+    updatePlant
 };

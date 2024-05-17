@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function (){
 
     const nicknameField = document.getElementById('nickname');
-    const nickname = sessionStorage.getItem('nickName');
+    let nickname = sessionStorage.getItem('nickName');
     if (nicknameField && nickname) {
         nicknameField.value = nickname;
     }
@@ -48,6 +48,11 @@ document.addEventListener('DOMContentLoaded', function (){
         }
     })
 
+
+    /*
+        Used leaflet js to implement location picker functionality
+        uses navigator.geolocation to retrieve the current position
+     */
 
     let plantLatitude = 0
     let plantLongitude = 0
@@ -108,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function (){
     let base64 = null
 
 
-
+    // Image upload and camera button to add images of the plant
 
     uploadBtn.addEventListener("click", function() {
         imageUpload.click(); // Triggers the file input click
@@ -190,9 +195,15 @@ document.addEventListener('DOMContentLoaded', function (){
         return checkedValue;
     }
 
+    // Submit function to post the plant details to the mongodb or indexed db server based on the device network i.e. online or offline
+
     submitBtn.addEventListener('click', () => {
         let formData = new FormData();
-        formData.append('name', name.value);
+        let plantName = name.value
+        nickname = nicknameField.value.trim()
+        plantName = plantName.charAt(0).toUpperCase() + plantName.slice(1)
+        sessionStorage.setItem('nickName', nickname)
+        formData.append('name', plantName);
         formData.append('nickname', nickname)
         formData.append('description', description.value);
         formData.append('date', date.value)
@@ -215,6 +226,10 @@ document.addEventListener('DOMContentLoaded', function (){
             for (var i = 0; i < imageUpload.files.length; i++) {
                 formData.append('photos', imageUpload.files[i]);
             }
+        }
+        if (height.value==='0' || spread.value==='0') {
+            alert("Plant height and spread must be greater than 0!");
+            return;
         }
         let plants={};
         for (const [key, value] of formData.entries()) {

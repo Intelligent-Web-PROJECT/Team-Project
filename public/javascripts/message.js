@@ -24,30 +24,8 @@ function init() {
 
     socket.on('chat', function (room, userId, chatText) {
         console.log('Received message:', chatText);
-        let formData = new FormData()
+        writeNewMessage(chatText, userId);
 
-
-        if (navigator.onLine) {
-            writeNewMessage(chatText, userId);
-            formData.append('plant', room)
-            formData.append('nickname', userId)
-            formData.append('text', chatText)
-            fetch('/addMessage', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => {
-                if (!response.ok) {
-                    throw new Error("Network error")
-                }
-                return response.text()
-            })
-                .catch(error => {
-                    console.log(error);
-                });
-
-        } else {
-        }
     });
 }
 
@@ -99,6 +77,36 @@ function sendMessage() {
     console.log('inside send message')
     let chatText = chatInput.value
     if (chatText.trim() !== '') {
-        socket.emit('chat',roomNo, name, chatText)
+        let formData = new FormData()
+
+        if (navigator.onLine) {
+            socket.emit('chat',roomNo, name, chatText)
+            formData.append('plant', roomNo)
+            formData.append('nickname', name)
+            formData.append('text', chatText)
+            fetch('/addMessage', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network error")
+                    }
+                    return response.text()
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+
+        } else {
+            let data = JSON.stringify({
+                plant: roomNo,
+                nickname: name,
+                text: chatText
+            });
+            insertComment(data, -1);
+            writeNewMessage(chatText, name);
+        }
+
     }
 }

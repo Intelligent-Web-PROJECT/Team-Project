@@ -1,5 +1,5 @@
 const { Plant } = require('../models/schema/plant');
-const { getComments } = require("../models/mongodb");
+const { getComments, updatePlant} = require("../models/mongodb");
 const https = require('https');
 
 // Function to render plant details page
@@ -86,9 +86,18 @@ async function fetchPlantInfo(plantName) {
     });
 }
 
+async function updatePlantName(req, res) {
+    const id = req.params.id
+    const name = req.body.name
+    console.log(name)
+    await updatePlant(id, name)
+    res.status(200).send('Plant updated successfully')
+}
+
 
 
 
 module.exports = {
-    getPlantDetails
+    getPlantDetails,
+    updatePlantName
 };

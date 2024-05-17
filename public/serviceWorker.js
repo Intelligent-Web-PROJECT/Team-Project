@@ -1,10 +1,15 @@
+/*
+    service worker file to implement the functionality of offline and online app interactions
+ */
+
 const staticCacheName = 'Plants Recognition';
 
+// Install function of service worker
 self.addEventListener('install', event => {
     console.log('Installing plants service worker');
     event.waitUntil(caches.open(staticCacheName).then(cache => {
         console.log('Caching the file');
-        return cache.addAll(['/', '/my-plants',
+        return cache.addAll(['/', '/allPlants',
             '/stylesheets/landing.css',
             '/stylesheets/style.css',
             '/stylesheets/list_plant_style.css',
@@ -17,18 +22,13 @@ self.addEventListener('install', event => {
     }));
 });
 
+//fetch function of service worker
 self.addEventListener('fetch', (event) => {
     console.log("in fetch of service worker")
-    const url = new URL(event.request.url)
-
-    if (url.pathname.startsWith('/login')) {
-        event.respondWith(fetch(event.request))
-        return
-    }
     event.respondWith(networkThenCache(event));
-
 });
 
+//network first then cache function
 async function networkThenCache(event) {
     try {
         const networkResponse = await fetch(event.request);
@@ -50,21 +50,24 @@ async function networkThenCache(event) {
     }
 }
 
+// Sync function to update the mongodb when device is online
 self.addEventListener('sync',  async (event) => {
     console.info('Event: Sync', event);
     try {
-        if (event.tag === 'sync-data') {
-            const plants = await getSightingFromIndexDB();
-            const result = await syncPlantData(plants);
-            console.log(result)
-            updatePlant(plants);
+        const plants = await getSightingFromIndexDB();
+        const result = await syncPlantData(plants);
+        console.log('Synced plants', plants)
+        await updatePlant(plants);
 
-            // const comments = await getCommentFromIndexDB();
-            // const commentResult = await syncCommentToMongoDB(comments);
-            // updateCommentUnsync(commentResult);
-
-            console.info('All Sync Done!');
+        const comments = await getCommentsFromIndexDB();
+        if (comments.length > 0) {
+            const syncedComments = await syncCommentsToMongoDB(comments);
+            const syncedCommentIds = syncedComments.map(comment => comment.idText);
+            console.log('Deleting comments with IDs:', syncedCommentIds);
+            await deleteCommentsFromIndexDB(syncedCommentIds);
         }
+
+        console.info('All Sync Done!');
 
     } catch (error) {
         console.error('Sync Failed:', error);
@@ -73,7 +76,7 @@ self.addEventListener('sync',  async (event) => {
 
 async function getSightingFromIndexDB() {
     return new Promise(function(resolve, reject) {
-        const request = indexedDB.open("plantRecognition",1);
+        const request = indexedDB.open("plantRecogn",2);
         request.onerror = function(event) {
             reject(event.target.error);
         };
@@ -105,25 +108,43 @@ async function getSightingFromIndexDB() {
     })
 }
 
-function updatePlant (data){
-    const request = indexedDB.open("plantRecognition",1);
+async function updatePlant(syncedPlants) {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("plantRecogn", 2);
 
-    request.onerror = function(event) {
-        reject(event.target.error);
-    };
-    request.onsuccess = async function (event) {
-        console.log('inside request onsuccess')
-        const plantDB = event.target.result
-        const transaction = plantDB.transaction(["plantsSighting"], "readwrite")
-        const plantStore = transaction.objectStore("plantsSighting")
+        request.onerror = (event) => reject(event.target.error);
+        request.onsuccess = (event) => {
+            const plantDB = event.target.result;
+            const transaction = plantDB.transaction(["plantsSighting"], "readwrite");
+            const plantStore = transaction.objectStore("plantsSighting");
 
-        for (const plant of data) {
-            console.log('inside for loop')
-            console.log(`Deleting plant ${plant._id}`)
-            const deletePlant = await plantStore.delete(plant.name)
-
-        }
-    }
+            const cursorRequest = plantStore.openCursor();
+            cursorRequest.onsuccess = (event) => {
+                const cursor = event.target.result;
+                if (cursor) {
+                    const plant = cursor.value;
+                    const syncedPlant = syncedPlants.find(p => p._id === plant._id);
+                    if (syncedPlant) {
+                        const deleteRequest = cursor.delete();
+                        deleteRequest.onsuccess = () => {
+                            console.log(`Deleted plant ${plant._id} from IndexedDB`);
+                        };
+                        deleteRequest.onerror = (event) => {
+                            console.error(`Failed to delete plant ${plant._id}`, event.target.error);
+                        };
+                    }
+                    cursor.continue();
+                } else {
+                    console.log('No more entries to iterate.');
+                    resolve();
+                }
+            };
+            cursorRequest.onerror = (event) => {
+                console.error('Failed to open cursor:', event.target.error);
+                reject(event.target.error);
+            };
+        };
+    });
 }
 
 async function syncPlantData(data) {
@@ -149,8 +170,7 @@ async function syncPlantData(data) {
             throw new Error('Failed to submit form');
         }
 
-        const result = await response.json();
-        return result;
+        return await response.json();
     } catch (error) {
         console.log('Error submitting form:', error);
         throw error;
@@ -158,4 +178,98 @@ async function syncPlantData(data) {
 }
 
 
+async function getCommentsFromIndexDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("plantRecogn", 2);
+
+        request.onerror = (event) => reject(event.target.error);
+        request.onsuccess = (event) => {
+            const birdWatchingIDB = event.target.result;
+            const transaction = birdWatchingIDB.transaction(["comment"], "readonly");
+            const commentStore = transaction.objectStore("comment");
+            const getAllRequest = commentStore.getAll();
+
+            getAllRequest.onsuccess = (event) => resolve(event.target.result);
+            getAllRequest.onerror = (event) => reject(event.target.error);
+        };
+    });
+}
+
+async function syncCommentsToMongoDB(comments) {
+    try {
+        const response = await fetch('/syncComments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(comments)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to sync comments');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error syncing comments:', error);
+        throw error;
+    }
+}
+
+
+async function deleteCommentsFromIndexDB(ids) {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("plantRecogn", 2);
+
+        request.onerror = (event) => {
+            console.error('Error opening IndexedDB:', event.target.error);
+            reject(event.target.error);
+        };
+
+        request.onsuccess = (event) => {
+            const plantRecognIDB = event.target.result;
+            const transaction = plantRecognIDB.transaction(["comment"], "readwrite");
+            const commentStore = transaction.objectStore("comment");
+
+            const cursorRequest = commentStore.openCursor();
+
+            cursorRequest.onerror = (event) => {
+                console.error('Error opening cursor:', event.target.error);
+                reject(event.target.error);
+            };
+
+            cursorRequest.onsuccess = (event) => {
+                const cursor = event.target.result;
+
+                if (cursor) {
+                    if (ids.includes(cursor.value.idText)) {
+                        const deleteRequest = cursor.delete();
+
+                        deleteRequest.onerror = (event) => {
+                            console.error('Error deleting record:', event.target.error);
+                            reject(event.target.error);
+                        };
+
+                        deleteRequest.onsuccess = () => {
+                            console.log(`Deleted comment with id ${cursor.value.idText} from IndexedDB`);
+                            cursor.continue();
+                        };
+                    } else {
+                        cursor.continue();
+                    }
+                } else {
+                    transaction.oncomplete = () => {
+                        console.log('Transaction completed. All specified records deleted.');
+                        resolve();
+                    };
+
+                    transaction.onerror = (event) => {
+                        console.error('Transaction error:', event.target.error);
+                        reject(event.target.error);
+                    };
+                }
+            };
+        };
+    });
+}
 
