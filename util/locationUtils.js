@@ -1,3 +1,5 @@
+
+// Calculate displacement between two locations
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Radius of the Earth in kilometers
     const dLat = deg2rad(lat2 - lat1);
@@ -14,6 +16,8 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 function deg2rad(deg) {
     return deg * (Math.PI/180);
 }
+
+// Sort plants by Distance
 
 function sortItemsByDistance(myLatitude, myLongitude, items) {
     // Calculate distance for each item and add it as a new property
