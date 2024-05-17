@@ -28,6 +28,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 // No Flowers
                 filteredPlants = plantItems.filter(item => item.dataset.flowers === 'false');
                 break;
+            case '5':
+                // Most recent date
+                filteredPlants = plantItems.sort((a, b) => new Date(b.dataset.date) - new Date(a.dataset.date));
+                break;
             case '0':
             default:
                 filteredPlants = plantItems;
