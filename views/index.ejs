@@ -1,12 +1,22 @@
 <%- include("components/header") %>
-
 <%- include("components/navbar") %>
 
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('./serviceWorker.js')
+            .then(function() { console.log('Service Worker Registered'); });
+    }
+</script>
 
 <!-- Slogan/Banner -->
 <div class="landing-title text-center py-4">
     <h1>Welcome to FloraScan</h1>
     <h6 class="landing-slogan mb-0">Discover the Beauty of Flora, One Plant at a Time</h6>
+    <div class="container text-center my-4">
+        <input class="form-control w-25 m-auto mb-3" id="nickname" placeholder="Enter nickname">
+        <button class="btn btn-lg" onclick="nicknameButton()">Start Exploring</button>
+    </div>
 </div>
 <!-- End of Slogan/Banner -->
 
@@ -52,3 +62,17 @@
     </div>
 </div>
 <!-- End of Section: Design Block -->
+
+<script src="/javascripts/indexDb.js"></script>
+<script>
+    function nicknameButton() {
+        let nickname = document.getElementById('nickname');
+        let name = nickname.value
+        sessionStorage.setItem('nickName', name)
+        if(sessionStorage.getItem('nickName')) {
+            window.location.href='/allPlants'
+        } else {
+            alert("Please Field Your Nick Name Before Start.")
+        }
+    }
+</script>
