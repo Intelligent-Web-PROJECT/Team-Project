@@ -143,6 +143,8 @@ document.addEventListener('DOMContentLoaded', function (){
         }
     });
 
+    // Click picture using webcam camera
+
     cameraBtn.addEventListener('click', function() {
         if (cameraBtn.innerText === "Click a picture") {
             // Clear the previous image preview
@@ -245,7 +247,19 @@ document.addEventListener('DOMContentLoaded', function (){
                         throw new Error('Network response was not ok');
                     }
                     window.location.href = '/allPlants'
+                    if (Notification.permission === "granted") {
+                        // If it's okay, let's create a notification
+                        const notification = new Notification("You plant has successfully been posted");
+                    } else if (Notification.permission !== "denied") {
+                        Notification.requestPermission().then(function (permission) {
+                            // If the user accepts, let's create a notification
+                            if (permission === "granted") {
+                                const notification = new Notification("You plant has successfully been posted");
+                            }
+                        });
+                    }
                     return response.text()
+
                 })
                 .catch(error => {
                     console.log(error);
