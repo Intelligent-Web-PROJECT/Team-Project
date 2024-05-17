@@ -28,7 +28,7 @@ a:hover{
 }
 
 .card:hover {
-  transform: scale(1.03); /* Enlarge the card by 5% when hovered */
+  transform: scale(1.02); /* Enlarge the card by 5% when hovered */
 }
 
 .logo {
