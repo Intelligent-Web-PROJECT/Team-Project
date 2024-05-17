@@ -29,7 +29,7 @@
                         <% if (plant.photos.length > 0) { %>
                             <img src="data:<%= plant.photos[0]?.img_type %>;base64,<%= Buffer.from(plant.photos[0]?.img_data ?? "").toString('base64') %>"
                                  class="card-img-top"
-                                 alt="<%= plant.name %>">
+                                 alt="<%= plant.name %>" style="height: 300px">
                         <% } %>
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title"><%= plant.name %></h5>

@@ -1,5 +1,10 @@
+/*
+    service worker file to implement the functionality of offline and online app interactions
+ */
+
 const staticCacheName = 'Plants Recognition';
 
+// Install function of service worker
 self.addEventListener('install', event => {
     console.log('Installing plants service worker');
     event.waitUntil(caches.open(staticCacheName).then(cache => {
@@ -17,18 +22,13 @@ self.addEventListener('install', event => {
     }));
 });
 
+//fetch function of service worker
 self.addEventListener('fetch', (event) => {
     console.log("in fetch of service worker")
-    const url = new URL(event.request.url)
-
-    if (url.pathname.startsWith('/login')) {
-        event.respondWith(fetch(event.request))
-        return
-    }
     event.respondWith(networkThenCache(event));
-
 });
 
+//network first then cache function
 async function networkThenCache(event) {
     try {
         const networkResponse = await fetch(event.request);
@@ -50,6 +50,7 @@ async function networkThenCache(event) {
     }
 }
 
+// Sync function to update the mongodb when device is online
 self.addEventListener('sync',  async (event) => {
     console.info('Event: Sync', event);
     try {

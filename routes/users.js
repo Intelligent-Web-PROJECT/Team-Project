@@ -5,7 +5,6 @@ const {upload} = require("../middlewares/multer");
 const {getPlantDetails, updatePlantName} = require("../controllers/detailsController");
 var router = express.Router();
 
-/* GET users listing. */
 
 router.get('/list-plant', listPlant)
 
@@ -15,15 +14,11 @@ router.post('/syncPlant', upload.array('photos', 3), syncPlant)
 
 router.get('/welcome', getWelcomePage)
 
-// Get all plants
 router.get('/allPlants', getAllPlants);
-
-
 
 router.get('/plants/:plantId', getPlantDetails);
 
 router.post('/updatePlant/:id',upload.none(), updatePlantName)
-
 
 router.post('/addMessage',upload.none(), addMessage)
 
