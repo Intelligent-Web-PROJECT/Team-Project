@@ -67,3 +67,7 @@ Click on the link to start exploring FloraScan
 
 When the device is offline the details will be stored in IndexedDB and when the device is online, refresh the page and this will be added to the database.
 Same with the chat messages.
+
+
+GitHub Repository -
+https://github.com/Intelligent-Web-PROJECT/Team-Project
