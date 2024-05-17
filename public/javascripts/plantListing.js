@@ -195,6 +195,7 @@ document.addEventListener('DOMContentLoaded', function (){
         let plantName = name.value
         nickname = nicknameField.value.trim()
         plantName = plantName.charAt(0).toUpperCase() + plantName.slice(1)
+        sessionStorage.setItem('nickName', nickname)
         formData.append('name', plantName);
         formData.append('nickname', nickname)
         formData.append('description', description.value);
