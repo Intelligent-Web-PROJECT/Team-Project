@@ -1,6 +1,7 @@
-// window.onload = async function() {
-//     registerSync()
-// }
+window.onload = async function() {
+    syncChats()
+}
+
 
 function updateIdentification() {
     const plantName = document.getElementById('plantName')
@@ -27,4 +28,21 @@ function updateIdentification() {
             console.log(error)
         })
 
+}
+
+
+function syncChats() {
+    new Promise(function (resolve, reject) {
+        Notification.requestPermission(function (result) {
+            resolve();
+        })
+    }).then(function () {
+        return navigator.serviceWorker.ready;
+    }).then(async function (sw) {
+        return sw.sync.register('sync-tag');
+    }).then(function () {
+        console.info('Sync registered');
+    }).catch(function (err) {
+        console.error('Failed to register sync:', err.message);
+    });
 }

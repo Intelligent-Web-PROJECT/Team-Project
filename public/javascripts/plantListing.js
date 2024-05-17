@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function (){
 
     const nicknameField = document.getElementById('nickname');
-    const nickname = sessionStorage.getItem('nickName');
+    let nickname = sessionStorage.getItem('nickName');
     if (nicknameField && nickname) {
         nicknameField.value = nickname;
     }
@@ -192,7 +192,10 @@ document.addEventListener('DOMContentLoaded', function (){
 
     submitBtn.addEventListener('click', () => {
         let formData = new FormData();
-        formData.append('name', name.value);
+        let plantName = name.value
+        nickname = nicknameField.value.trim()
+        plantName = plantName.charAt(0).toUpperCase() + plantName.slice(1)
+        formData.append('name', plantName);
         formData.append('nickname', nickname)
         formData.append('description', description.value);
         formData.append('date', date.value)

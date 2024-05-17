@@ -76,34 +76,6 @@ function getPlantSighting() {
 }
 
 
-
-function getComment() {
-    return new Promise((resolve, reject) => {
-        const birtWatchingIDB = requestIndexedDB.result;
-        const transaction = birtWatchingIDB.transaction(["comment"], "readwrite");
-        const commentStore = transaction.objectStore("comment");
-        const cursorRequest = commentStore.openCursor();
-        const result = [];
-
-        cursorRequest.onsuccess = function(event) {
-            const cursor = event.target.result;
-            if (cursor) {
-                const data = cursor.value;
-                result.push(data)
-                cursor.continue();
-            } else {
-
-                resolve(result);
-            }
-        };
-
-        cursorRequest.onerror = function(event) {
-            reject(event.target.error);
-        };
-    });
-}
-
-
 /**
  * Handling IndexDb Error case
  */

@@ -59,14 +59,14 @@ async function addComment(plantId, userId, commentText) {
                     time: Date.now()
                 }]
             })
-            await newComment.save()
+            return await newComment.save()
         } else {
             existingComment.comments.push({
                 nickname: userId,
                 text: commentText,
                 time: Date.now()
             })
-            await existingComment.save()
+            return await existingComment.save()
         }
     }catch (error) {
         console.log(error)
@@ -86,7 +86,7 @@ async function updatePlant(plantId, name) {
             name: name
         }
     }
-    return Plant.updateOne(filter, update);
+    return await Plant.updateOne(filter, update);
 }
 
 

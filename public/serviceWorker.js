@@ -58,9 +58,13 @@ self.addEventListener('sync',  async (event) => {
         console.log('Synced plants', plants)
         await updatePlant(plants);
 
-        // const comments = await getCommentFromIndexDB();
-        // const commentResult = await syncCommentToMongoDB(comments);
-        // updateCommentUnsync(commentResult);
+        const comments = await getCommentsFromIndexDB();
+        if (comments.length > 0) {
+            const syncedComments = await syncCommentsToMongoDB(comments);
+            const syncedCommentIds = syncedComments.map(comment => comment.idText);
+            console.log('Deleting comments with IDs:', syncedCommentIds);
+            await deleteCommentsFromIndexDB(syncedCommentIds);
+        }
 
         console.info('All Sync Done!');
 
@@ -173,4 +177,98 @@ async function syncPlantData(data) {
 }
 
 
+async function getCommentsFromIndexDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("plantRecogn", 2);
+
+        request.onerror = (event) => reject(event.target.error);
+        request.onsuccess = (event) => {
+            const birdWatchingIDB = event.target.result;
+            const transaction = birdWatchingIDB.transaction(["comment"], "readonly");
+            const commentStore = transaction.objectStore("comment");
+            const getAllRequest = commentStore.getAll();
+
+            getAllRequest.onsuccess = (event) => resolve(event.target.result);
+            getAllRequest.onerror = (event) => reject(event.target.error);
+        };
+    });
+}
+
+async function syncCommentsToMongoDB(comments) {
+    try {
+        const response = await fetch('/syncComments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(comments)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to sync comments');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error syncing comments:', error);
+        throw error;
+    }
+}
+
+
+async function deleteCommentsFromIndexDB(ids) {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("plantRecogn", 2);
+
+        request.onerror = (event) => {
+            console.error('Error opening IndexedDB:', event.target.error);
+            reject(event.target.error);
+        };
+
+        request.onsuccess = (event) => {
+            const plantRecognIDB = event.target.result;
+            const transaction = plantRecognIDB.transaction(["comment"], "readwrite");
+            const commentStore = transaction.objectStore("comment");
+
+            const cursorRequest = commentStore.openCursor();
+
+            cursorRequest.onerror = (event) => {
+                console.error('Error opening cursor:', event.target.error);
+                reject(event.target.error);
+            };
+
+            cursorRequest.onsuccess = (event) => {
+                const cursor = event.target.result;
+
+                if (cursor) {
+                    if (ids.includes(cursor.value.idText)) {
+                        const deleteRequest = cursor.delete();
+
+                        deleteRequest.onerror = (event) => {
+                            console.error('Error deleting record:', event.target.error);
+                            reject(event.target.error);
+                        };
+
+                        deleteRequest.onsuccess = () => {
+                            console.log(`Deleted comment with id ${cursor.value.idText} from IndexedDB`);
+                            cursor.continue();
+                        };
+                    } else {
+                        cursor.continue();
+                    }
+                } else {
+                    transaction.oncomplete = () => {
+                        console.log('Transaction completed. All specified records deleted.');
+                        resolve();
+                    };
+
+                    transaction.onerror = (event) => {
+                        console.error('Transaction error:', event.target.error);
+                        reject(event.target.error);
+                    };
+                }
+            };
+        };
+    });
+}
 
