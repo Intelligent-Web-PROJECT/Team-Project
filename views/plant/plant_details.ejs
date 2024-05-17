@@ -74,6 +74,9 @@
                             <div class="colon">:</div>
                             <div class="value justify-text"><%= plant.description %></div>
                         </div>
+                        <div>
+                            <button class="edit-plant-btn btn btn-primary d-none" id="ownerButton" data-bs-toggle="modal" data-bs-target="#editPlantModal">Update Plant</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -85,7 +88,7 @@
                         <h2 class="card-title">Insights from DBpedia</h2>
                         <% if (dbpediaInfo) { %>
                             <div class="plant-detail">
-                                <div class="label">PLant Overview</div>
+                                <div class="label">Plant Overview</div>
                                 <div class="colon">:</div>
                                 <div class="value justify-text"><%= dbpediaInfo.description || 'Not Available' %></div>
                             </div>
@@ -109,17 +112,16 @@
         <!-- End of Design Block -->
 
         <!--Comment Section Start-->
-        <p hidden="hidden" id="username"><%= user.username %></p>
-        <button class="btn btn-lg" id="viewChats" onclick="connectToRoom()">View Chats</button>
+        <button class="btn btn-primary" id="viewChats" onclick="connectToRoom()">View Chats</button>
         <div class="chat-container container" id="chat-container" style="display: none">
             <h3 class="text-muted">Chat </h3>
             <div class="chat-section p-3">
                 <div class="history" id="history">
                     <% plantComment?.comments.forEach(comment => { %>
-                        <div class="chat-message <%= comment.user === user.username ? 'user-message' : 'other-message' %>">
+                        <div class="chat-message other-message">
                             <i class="fa-regular fa-user profile-icon"></i>
                             <div class="message-content">
-                                <p class="message-sender"><%= comment.user === user.username ? 'Me' : comment.user %></p>
+                                <p class="message-sender"><%= comment.nickname%></p>
                                 <p class="message-text"><%= comment.text %></p>
                             </div>
                         </div>
@@ -140,6 +142,42 @@
     </div>
 </div>
 <!-- End of Jumbotron -->
+
+<!--Edit Plant Modal-->
+<div class="modal fade" id="editPlantModal" tabindex="-1" aria-labelledby="editPlantModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="card-title">Update Plant Identification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="plantName" class="label">Plant Name</label>
+                        <input type="text" class="form-control" id="plantName" value="<%= plant.name %>" required>
+                        <button type="submit" class="btn btn-success" id="updateBtn">Confirm Identification</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End of Modal-->
+
+<script>
+    function getNickname() {
+        return sessionStorage.getItem('nickName');
+    }
+
+    const currentUserNickname = getNickname();
+    const plantOwnerNickname = '<%= plant.nickname %>';
+
+    // Use classList to control visibility
+    const ownerButton = document.getElementById('ownerButton');
+    if (currentUserNickname === plantOwnerNickname) {
+        ownerButton.classList.remove('d-none'); // Make visible
+    }
+</script>
+
 
 <script src="/javascripts/message.js"></script>
 

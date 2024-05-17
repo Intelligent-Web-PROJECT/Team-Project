@@ -88,3 +88,26 @@
     width: 100%;
     height: 100%;
 }
+
+/*Edit Plant Button*/
+.edit-plant-btn {
+    padding: 10px 20px; /* Padding around the text within the button */
+    background-color: #198754; /* Green background color */
+    color: white; /* White text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Slightly rounded corners */
+    cursor: pointer; /* Cursor indicates clickable item */
+    margin-top: 20px; /* Margin on top to separate from the last plant detail */
+    width: 60%; /* Makes the button stretch to the width of its container */
+    font-size: 16px; /* Larger font size for better readability */
+    text-align: center; /* Ensures text is centered */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.edit-plant-btn:hover {
+    background-color: #115c39; /* Slightly darker green on hover */
+}
+
+.hidden {
+    display: none;
+}
