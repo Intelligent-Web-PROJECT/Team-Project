@@ -1,6 +1,6 @@
 <%- include("components/header") %>
-
 <%- include("components/navbar") %>
+
 <script>
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker
@@ -10,14 +10,13 @@
 </script>
 
 <!-- Slogan/Banner -->
-<div class="landing-slogan text-center py-4">
+<div class="landing-title text-center py-4">
     <h1>Welcome to FloraScan</h1>
-    <p class="mb-0">Discover the Beauty of Flora, One Plant at a Time</p>
+    <h6 class="landing-slogan mb-0">Discover the Beauty of Flora, One Plant at a Time</h6>
     <div class="container text-center my-4">
         <input class="form-control w-25 m-auto mb-3" id="nickname" placeholder="Enter nickname">
         <button class="btn btn-lg" onclick="nicknameButton()">Start Exploring</button>
     </div>
-
 </div>
 <!-- End of Slogan/Banner -->
 
@@ -64,15 +63,6 @@
 </div>
 <!-- End of Section: Design Block -->
 
-<!-- Start Exploring Button -->
-<div class="container text-center my-4">
-    <form action="/my-plants" method="get">
-        <button class="btn btn-lg">Start Exploring</button>
-    </form>
-
-    <p class="mt-3">Embark on an adventure of discovery. Let Nature's Notebook be your guide!</p>
-</div>
-<!-- End of Start Exploring Button -->
 <script src="/javascripts/indexDb.js"></script>
 <script>
     function nicknameButton() {
