@@ -26,11 +26,9 @@ a:hover{
 .card {
   transition: transform 0.3s ease-in-out; /* Apply transition effect on transform property */
 }
-.card-img-top {
-  height: 300px;
-}
+
 .card:hover {
-  transform: scale(1.03); /* Enlarge the card by 5% when hovered */
+  transform: scale(1.18); /* Enlarge the card by 5% when hovered */
 }
 
 .logo {
@@ -54,11 +52,11 @@ a:hover{
   justify-content: flex-end;
 }
 
-.list-form-label {
+.form-label {
   display: block;
   margin-bottom: 8px;
 }
-.btn-group, .list-form-control {
+.btn-group, .form-control {
   display: flex;
   justify-content: start;
   margin-bottom: 16px;
@@ -88,7 +86,7 @@ a:hover{
 .btn-check:checked + .btn:hover {
   background-color: #367B37;
 }
-.list-form-control {
+.form-control {
   padding: 10px;
   font-size: 16px;
   width: 300px;
@@ -105,23 +103,17 @@ a:hover{
   align-items: center;
   margin-bottom: 16px;
 }
-#imagePreview img {
-  max-height: 500px;
-  width: auto;
-  margin-right: 10px;
-  object-fit: contain;
-}
 
 
 .chat-container {
   margin: 20px auto;
-  background-color: #fff;
+  background-color: #ecefe9;
   border-radius: 8px;
   box-shadow: 0 2px 15px rgba(0,0,0,0.1);
   padding: 20px;
 }
 .chat-section {
-  background-color: #e9ecef;
+  background-color: #ffffff;
   border-radius: 8px;
   padding: 10px;
   overflow-y: auto;
@@ -190,57 +182,4 @@ a:hover{
   height: 45px;
 }
 
-/*Plant Details CSS From Here:*/
-.container-detail {
-  width: 700px;
-}
 
-.no-enlarge:hover {
-  transform: scale(1);
-}
-
-.detail-image-container {
-  max-width: 300px; /* Adjust the maximum width as needed */
-  margin: 30px auto; /* Center the image container horizontally */
-}
-
-.card-body-detail {
-  background-color: #f8f9fa; /* Light gray background */
-  border-radius: 10px; /* Rounded corners */
-  padding: 20px; /* Add some padding */
-  margin-left: 50px;
-  margin-right: 50px;
-}
-
-.plant-detail {
-  display: flex; /* Display items inline */
-  margin-bottom: 10px; /* Adjust spacing between plant details */
-}
-
-.label {
-  flex: 1; /* Take up all available space */
-  color: #198754;
-  font-weight: 600; /* Add bold font weight to label */
-  text-align: left; /* Align label text left */
-}
-
-.value {
-  flex: 3; /* Take up 3 times more space than label */
-  color: #364940;
-  text-align: justify; /* Justify text in value */
-}
-
-.justify-text {
-  text-align: justify; /* Justify text */
-}
-
-.no-enlarge:hover {
-  transform: scale(1);
-}
-
-.list-group-item img {
-  height: 200px;
-  width: 200px;
-  object-fit: cover; /* Ensure the image fits well within the specified size */
-  border-radius: 5px;
-}

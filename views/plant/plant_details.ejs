@@ -1,135 +1,183 @@
 <%- include("../components/header") %>
 <%- include("../components/navbar") %>
 
-<!-- Banner -->
-<div class="landing-slogan text-center py-4">
-    <h1>Plant Details </h1>
+<!-- Banner Start -->
+<div class="landing-title text-center py-4">
+    <h1>Plant Details</h1>
 </div>
 <!-- End of Banner -->
 
 
-<!-- Design Block-->
+<!-- Jumbotron with the main content -->
 <div class="jumbotron jumbotron-fluid bg-success-subtle text-center py-4">
     <div class="container container-detail">
-        <div class="card rounded bg-light mx-auto text-center no-enlarge">
-            <div class="detail-image-container">
-                <% if (plant.photos.length > 0) { %>
-                    <img src="data:image/<%= plant.photos[0].img_type %>;base64,<%= Buffer.from(plant.photos[0].img_data).toString('base64') %>" class="card-img-top img-fluid" alt="Plant Image">
-                <% } else { %>
-                    <img src="/images/placeholder.jpg" class="card-img-top img-fluid" alt="Plant Image">
-                <% } %>
+        <!-- Design Block -->
+        <div class="row">
+            <!-- Section 1: Plant Image -->
+            <div class="col-md-6 mb-4">
+                <div class="card no-enlarge h-100">
+                    <div class="detail-image-container">
+                        <% if (plant.photos.length > 0) { %>
+                            <img src="data:image/<%= plant.photos[0].img_type %>;base64,<%= Buffer.from(plant.photos[0].img_data).toString('base64') %>" class="card-img-top img-fluid rounded" alt="Plant Image">
+                        <% } else { %>
+                            <img src="/images/placeholder.jpg" class="card-img-top img-fluid rounded" alt="Plant Image">
+                        <% } %>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-title mb-0">Plant Name: <%= plant.name %></h2>
+                    </div>
+                </div>
             </div>
-            <div class="card-body-detail">
 
-                <div class="plant-detail">
-                    <div class="label">Plant Name:</div>
-                    <div class="value"><%= plant.name %></div>
-                </div>
-
-                <div class="plant-detail">
-                    <div class="label">Description:</div>
-                    <div class="value justify-text"><%= plant.description %></div>
-                </div>
-
-                <div class="plant-detail">
-                    <div class="label">Height:</div>
-                    <div class="value"><%= plant.height %></div>
-                </div>
-
-                <div class="plant-detail">
-                    <div class="label">Spread:</div>
-                    <div class="value"><%= plant.spread %></div>
-                </div>
-
-                <div class="plant-detail">
-                    <div class="label">Has Flowers:</div>
-                    <div class="value"><%= plant.characteristics.have_flowers ? 'Yes' : 'No' %></div>
-                </div>
-
-                <div class="plant-detail">
-                    <div class="label">Has Leaves:</div>
-                    <div class="value"><%= plant.characteristics.have_leaves ? 'Yes' : 'No' %></div>
-                </div>
-
-                <div class="plant-detail">
-                    <div class="label">Has Fruits:</div>
-                    <div class="value"><%= plant.characteristics.have_fruits ? 'Yes' : 'No' %></div>
-                </div>
-
-                <div class="plant-detail">
-                    <div class="label">Sun Exposure:</div>
-                    <div class="value"><%= plant.characteristics.sun_exposure || 'N/A' %></div>
-                </div>
-
-                <div class="plant-detail">
-                    <div class="label">Flower Color:</div>
-                    <div class="value"><%= plant.characteristics.flower_colour || 'N/A' %></div>
-                </div>
-
-                <!-- Display DBpedia Information -->
-                <% if (dbpediaInfo) { %>
-                    <h2>Additional Information from DBpedia</h2>
-                    <div class="plant-detail">
-                        <div class="label">Plant Overview:</div>
-                        <div class="value"><%= dbpediaInfo.description || 'Not Available' %></div>
-                    </div>
-
-                    <div class="plant-detail">
-                        <div class="label">Taxon:</div>
-                        <div class="value"><%= dbpediaInfo.taxon || 'Not Available' %></div>
-                    </div>
-
-                    <div class="plant-detail">
-                        <div class="label">Wikipedia Page:</div>
-                        <div class="value">
-                            <% if (dbpediaInfo.primaryTopicUrl) { %>
-                                <a href="<%= dbpediaInfo.primaryTopicUrl %>" target="_blank">Learn More</a>
-                            <% } else { %>
-                                Not Available
-                            <% } %>
+            <!-- Section 2: Plant Characteristics -->
+            <div class="col-md-6 mb-4">
+                <div class="card no-enlarge w-100 h-100 d-flex flex-column plant-characteristics-card">
+                    <div class="card-body">
+                        <h2 class="card-title">Plant Characteristics</h2>
+                        <div class="plant-detail">
+                            <div class="label">Height</div>
+                            <div class="colon">:</div>
+                            <div class="value"><%= plant.height %></div>
+                        </div>
+                        <div class="plant-detail">
+                            <div class="label">Spread</div>
+                            <div class="colon">:</div>
+                            <div class="value"><%= plant.spread %></div>
+                        </div>
+                        <div class="plant-detail">
+                            <div class="label">Has Flowers</div>
+                            <div class="colon">:</div>
+                            <div class="value"><%= plant.characteristics.have_flowers ? 'Yes' : 'No' %></div>
+                        </div>
+                        <div class="plant-detail">
+                            <div class="label">Has Leaves</div>
+                            <div class="colon">:</div>
+                            <div class="value"><%= plant.characteristics.have_leaves ? 'Yes' : 'No' %></div>
+                        </div>
+                        <div class="plant-detail">
+                            <div class="label">Has Fruits</div>
+                            <div class="colon">:</div>
+                            <div class="value"><%= plant.characteristics.have_fruits ? 'Yes' : 'No' %></div>
+                        </div>
+                        <div class="plant-detail">
+                            <div class="label">Sun Exposure</div>
+                            <div class="colon">:</div>
+                            <div class="value"><%= plant.characteristics.sun_exposure || 'N/A' %></div>
+                        </div>
+                        <div class="plant-detail">
+                            <div class="label">Flower Color</div>
+                            <div class="colon">:</div>
+                            <div class="value"><%= plant.characteristics.flower_colour || 'N/A' %></div>
+                        </div>
+                        <div class="plant-detail">
+                            <div class="label">Description</div>
+                            <div class="colon">:</div>
+                            <div class="value justify-text"><%= plant.description %></div>
+                        </div>
+                        <div>
+                            <button class="edit-plant-btn btn btn-primary d-none" id="ownerButton" data-bs-toggle="modal" data-bs-target="#editPlantModal">Update Plant</button>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                <% } else { %>
-                    <p>No additional information available from DBpedia for this plant.</p>
-                <% } %>
-                <!-- End of DBpedia Information -->
+            <!-- Section 3: DBpedia Information -->
+            <div class="col-md-12">
+                <div class="card mb-4 no-enlarge">
+                    <div class="card-body">
+                        <h2 class="card-title">Insights from DBpedia</h2>
+                        <% if (dbpediaInfo) { %>
+                            <div class="plant-detail">
+                                <div class="label">Plant Overview</div>
+                                <div class="colon">:</div>
+                                <div class="value justify-text"><%= dbpediaInfo.description || 'Not Available' %></div>
+                            </div>
+                            <div class="plant-detail">
+                                <div class="label">Taxon</div>
+                                <div class="colon">:</div>
+                                <div class="value"><%= dbpediaInfo.taxon || 'Not Available' %></div>
+                            </div>
+                            <div class="plant-detail">
+                                <div class="label">Wikipedia Page</div>
+                                <div class="colon">:</div>
+                                <div class="value"><% if (dbpediaInfo.primaryTopicUrl) { %><a href="<%= dbpediaInfo.primaryTopicUrl %>" target="_blank">Learn More</a><% } else { %>Not Available<% } %></div>
+                                <% } else { %>
+                                    <p>Looks Like There's No Additional Info About this Plant</p>
+                                <% } %>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Design Block -->
 
+        <!--Comment Section Start-->
+        <button class="btn btn-primary" id="viewChats" onclick="connectToRoom()">View Chats</button>
+        <div class="chat-container container" id="chat-container" style="display: none">
+            <h3 class="text-muted">Chat </h3>
+            <div class="chat-section p-3">
+                <div class="history" id="history">
+                    <% plantComment?.comments.forEach(comment => { %>
+                        <div class="chat-message other-message">
+                            <i class="fa-regular fa-user profile-icon"></i>
+                            <div class="message-content">
+                                <p class="message-sender"><%= comment.nickname%></p>
+                                <p class="message-text"><%= comment.text %></p>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+                <div class="new-message" id="new-message"></div>
+                <div class="chat-input">
+                    <form onsubmit="return false;">
+                        <input type="text" id="chat_input" name="chat_input" class="form-control" placeholder="Type your message here">
+                        <button id="chat_send" class="btn btn-primary" onclick="sendMessage()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+                            </svg></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--Comment Section End-->
+    </div>
+</div>
+<!-- End of Jumbotron -->
+
+<!--Edit Plant Modal-->
+<div class="modal fade" id="editPlantModal" tabindex="-1" aria-labelledby="editPlantModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="card-title">Update Plant Identification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="plantName" class="label">Plant Name</label>
+                        <input type="text" class="form-control" id="plantName" value="<%= plant.name %>" required>
+                        <button type="submit" class="btn btn-success" id="updateBtn">Confirm Identification</button>
+                    </div>
             </div>
         </div>
     </div>
 </div>
+<!--End of Modal-->
 
-<!-- End of Design Block -->
+<script>
+    function getNickname() {
+        return sessionStorage.getItem('nickName');
+    }
 
-<!--Comment Section Start-->
-<button class="btn btn-primary" id="viewChats" onclick="connectToRoom()">View Chats</button>
-<div class="chat-container container" id="chat-container" style="display: none">
-    <h3 class="text-muted">Chat </h3>
-    <div class="chat-section p-3">
-        <div class="history" id="history">
-            <% plantComment?.comments.forEach(comment => { %>
-                <div class="chat-message other-message">
-                    <i class="fa-regular fa-user profile-icon"></i>
-                    <div class="message-content">
-                        <p class="message-sender"><%= comment.nickname%></p>
-                        <p class="message-text"><%= comment.text %></p>
-                    </div>
-                </div>
-            <% }) %>
-        </div>
-        <div class="new-message" id="new-message"></div>
-        <div class="chat-input">
-            <form onsubmit="return false;">
-                <input type="text" id="chat_input" name="chat_input" class="form-control" placeholder="Type your message here">
-                <button id="chat_send" class="btn btn-primary" onclick="sendMessage()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
-                        <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
-                    </svg></button>
-            </form>
-        </div>
-    </div>
-</div>
+    const currentUserNickname = getNickname();
+    const plantOwnerNickname = '<%= plant.nickname %>';
+
+    // Use classList to control visibility
+    const ownerButton = document.getElementById('ownerButton');
+    if (currentUserNickname === plantOwnerNickname) {
+        ownerButton.classList.remove('d-none'); // Make visible
+    }
+</script>
+
 
 <script src="/javascripts/message.js"></script>
 
-<!--Comment Section End-->
