@@ -12,8 +12,6 @@ router.post('/list-plant', upload.array('photos',3), postPlant)
 
 router.post('/syncPlant', upload.array('photos', 3), syncPlant)
 
-router.get('/welcome', getWelcomePage)
-
 router.get('/allPlants', getAllPlants);
 
 router.get('/plants/:plantId', getPlantDetails);
