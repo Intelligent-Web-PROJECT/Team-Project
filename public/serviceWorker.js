@@ -71,7 +71,7 @@ self.addEventListener('sync',  async (event) => {
 
 async function getSightingFromIndexDB() {
     return new Promise(function(resolve, reject) {
-        const request = indexedDB.open("plantRecognition",1);
+        const request = indexedDB.open("plantRecogn",2);
         request.onerror = function(event) {
             reject(event.target.error);
         };
@@ -105,7 +105,7 @@ async function getSightingFromIndexDB() {
 
 async function updatePlant(syncedPlants) {
     return new Promise((resolve, reject) => {
-        const request = indexedDB.open("plantRecognition", 1);
+        const request = indexedDB.open("plantRecogn", 2);
 
         request.onerror = (event) => reject(event.target.error);
         request.onsuccess = (event) => {

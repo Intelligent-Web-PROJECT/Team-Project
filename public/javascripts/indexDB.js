@@ -1,4 +1,4 @@
-let requestIndexedDB = indexedDB.open("plantRecognition",1)
+let requestIndexedDB = indexedDB.open("plantRecogn",2)
 requestIndexedDB.addEventListener("error",handlerError)
 requestIndexedDB.addEventListener("upgradeneeded",upgradeStores)
 requestIndexedDB.addEventListener("success", handleSuccess)
@@ -25,7 +25,7 @@ function insertPlantSighting (data,id){
 }
 
 
-function insertComment (data,id){
+function insertComment (data, id){
     console.log("insertComment",insertComment)
     const birtWatchingIDB = requestIndexedDB.result
     const transaction = birtWatchingIDB.transaction(["comment"],"readwrite")
@@ -37,7 +37,7 @@ function insertComment (data,id){
         idText: id,
         plant: parsedData.plant,
         text: parsedData.text,
-        user: parsedData.user,
+        user: parsedData.nickname,
         time: Date.now()
     };
 
@@ -117,7 +117,7 @@ function handlerError(err){
 function upgradeStores(ev){
     const db = ev.target.result
     db.createObjectStore("plantsSighting",{keyPath:"id", autoIncrement : true})
-   // db.createObjectStore("comment",{keyPath:"id", autoIncrement : true})
+    db.createObjectStore("comment",{keyPath:"id", autoIncrement : true})
     console.log("Object:'Plants Sighting' created in upgradeStores" )
 }
 
