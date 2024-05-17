@@ -1,11 +1,29 @@
 <%- include("components/header") %>
-
 <%- include("components/navbar") %>
+
 <script>
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker
             .register('./serviceWorker.js')
             .then(function() { console.log('Service Worker Registered'); });
+    }
+    async function validatePasswords(event) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (password !== confirmPassword) {
+            alert('Passwords do not match. Please try again.');
+            event.preventDefault(); // Prevent form submission
+            return false;
+        }
+
+        const isNicknameAvailable = await checkNicknameAvailability();
+        if (!isNicknameAvailable) {
+            event.preventDefault(); // Prevent form submission
+            return false;
+        }
+
+        return true; // Allow form submission
     }
 </script>
 
@@ -13,26 +31,82 @@
 <div class="landing-slogan text-center py-4">
     <h1>Welcome to FloraScan</h1>
     <p class="mb-0">Discover the Beauty of Flora, One Plant at a Time</p>
-    <div class="container text-center my-4">
-        <input class="form-control w-25 m-auto mb-3" id="nickname" placeholder="Enter nickname">
-        <button class="btn btn-lg" onclick="nicknameButton()">Start Exploring</button>
-    </div>
-
+    <p class="mt-3">Embark on an adventure of discovery. Let Nature's Notebook be your guide!</p>
 </div>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header text-center p-0">
+                    <div class="row no-gutters">
+                        <div class="col-6">
+                            <button id="loginBtn" class="authBtn active btn-block" onclick="showLogin()">Login</button>
+                        </div>
+                        <div class="col-6">
+                            <button id="registerBtn" class="authBtn btn-block" onclick="showRegister()">Register</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Login Form -->
+                    <div id="loginForm">
+                        <h5 class="card-title">Login</h5>
+                        <form action="/login" method="post" id="form">
+                            <div class="mb-3">
+                                <label for="loginNickname" class="form-label">Nickname</label>
+                                <input type="text" class="form-control" id="loginNickname" name="loginNickname">
+                            </div>
+                            <div class="mb-3">
+                                <label for="loginPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="loginPassword" name="loginPassword">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Let's Explore</button>
+                        </form>
+                    </div>
+                    <!-- Register Form -->
+                    <div id="registerForm" style="display: none;">
+                        <h5 class="card-title">Register</h5>
+                        <form action="/register" method="post" id="form" onsubmit="return validatePasswords(event)">
+                            <div class="mb-3">
+                                <label for="nickname" class="form-label">Choose a nickname</label>
+                                <input type="text" class="form-control" id="nickname" name="nickname">
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password">
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- End of Slogan/Banner -->
 
+<!-- End of Flipping Login/Register Card -->
+
 <!-- Section: Design Block -->
-<div class="container-fluid">
+<div class="container-fluid my-5">
     <div class="row justify-content-center">
         <div class="col-lg-12 px-4 py-5 px-md-5 text-center text-lg-start shadow-lg mx-2 my-2 rounded bg-success-subtle" style="background-color: hsl(0, 0%, 96%);">
             <div class="container">
                 <div class="row gx-lg-5">
+
                     <!-- Card 1 -->
                     <div class="col-lg-4 mb-5 mb-lg-0">
+
                         <div class="card h-100">
                             <div class="card-body">
                                 <h5 class="card-title">Plant Recognition</h5>
-                                <img src="/images/plant-snap.png" class="img-fluid my-3" alt="Plant Snap Image"> <!-- Added image here -->
+                                <img src="/images/plant-snap.png" class="img-fluid my-3" alt="Plant Snap Image">
                                 <p class="card-text">Snap a photo, unlock nature's secrets. Instantly identify plants and delve into their fascinating world</p>
                             </div>
                         </div>
@@ -42,7 +116,7 @@
                         <div class="card h-100">
                             <div class="card-body">
                                 <h5 class="card-title">Community Sightings</h5>
-                                <img src="/images/plant-community.jpg" class="img-fluid my-3" alt="Plant Community Image"> <!-- Added image here -->
+                                <img src="/images/plant-community.jpg" class="img-fluid my-3" alt="Plant Community Image">
                                 <p class="card-text">Join a passionate community of nature enthusiasts. Share your discoveries, learn from others, and connect with fellow plant lovers.</p>
                             </div>
                         </div>
@@ -52,7 +126,7 @@
                         <div class="card h-100">
                             <div class="card-body">
                                 <h5 class="card-title">Plant Collection</h5>
-                                <img src="/images/collection.png" class="img-fluid my-3" alt="Plant Community Image"> <!-- Added image here -->
+                                <img src="/images/collection.png" class="img-fluid my-3" alt="Plant Collection Image">
                                 <p class="card-text">Tailored recommendations based on your interests and contributions. Keep track of your sightings and engage with like-minded individuals.</p>
                             </div>
                         </div>
@@ -64,25 +138,31 @@
 </div>
 <!-- End of Section: Design Block -->
 
-<!-- Start Exploring Button -->
-<div class="container text-center my-4">
-    <form action="/my-plants" method="get">
-        <button class="btn btn-lg">Start Exploring</button>
-    </form>
-
-    <p class="mt-3">Embark on an adventure of discovery. Let Nature's Notebook be your guide!</p>
-</div>
-<!-- End of Start Exploring Button -->
 <script src="/javascripts/indexDb.js"></script>
 <script>
     function nicknameButton() {
         let nickname = document.getElementById('nickname');
-        let name = nickname.value
-        sessionStorage.setItem('nickName', name)
-        if(sessionStorage.getItem('nickName')) {
-            window.location.href='/allPlants'
+        let name = nickname.value;
+        sessionStorage.setItem('nickName', name);
+        if (sessionStorage.getItem('nickName')) {
+            window.location.href = '/allPlants';
         } else {
-            alert("Please Field Your Nick Name Before Start.")
+            alert("Please enter your nickname before starting.");
         }
     }
+
+    function showLogin() {
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('registerForm').style.display = 'none';
+        document.getElementById('loginBtn').classList.add('active');
+        document.getElementById('registerBtn').classList.remove('active');
+    }
+
+    function showRegister() {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registerForm').style.display = 'block';
+        document.getElementById('loginBtn').classList.remove('active');
+        document.getElementById('registerBtn').classList.add('active');
+    }
+
 </script>
