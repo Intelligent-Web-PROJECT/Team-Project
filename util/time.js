@@ -1,1 +1,0 @@
-exports.SEVEN_DAYS_S = 604800

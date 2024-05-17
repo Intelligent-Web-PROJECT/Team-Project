@@ -1,4 +1,4 @@
-const {addComment} = require('../../models/mongodb')
+// Initialise server side socket.io for bi-direction communication
 
 exports.init = function(io) {
     io.sockets.on('connection', function (socket) {

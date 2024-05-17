@@ -10,7 +10,7 @@ window.onload = async function () {
 async function getData() {
     return await getPlantSighting()
 }
-
+// function to add the offline plants to the view
 function addToView(plants) {
     const plantContainer = document.getElementById('plant-list');
 
@@ -58,6 +58,7 @@ function addToView(plants) {
     });
 }
 
+// function to sync plant data
 function registerSync() {
     new Promise(function (resolve, reject) {
         Notification.requestPermission(function (result) {

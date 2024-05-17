@@ -3,6 +3,8 @@ requestIndexedDB.addEventListener("error",handlerError)
 requestIndexedDB.addEventListener("upgradeneeded",upgradeStores)
 requestIndexedDB.addEventListener("success", handleSuccess)
 
+
+// all insert and get methods for plant and comment from indexedDB
 function insertPlantSighting (data,id){
     console.log("insertPlantsSighting to indexDB")
     const plantsIDB = requestIndexedDB.result
@@ -76,16 +78,15 @@ function getPlantSighting() {
 }
 
 
-/**
- * Handling IndexDb Error case
- */
+// Handling IndexDb Error case
+
 function handlerError(err){
     console.log(`IndexDb Error: ${err}` )
 }
 
-/**
- * Handling IndexDB Upgrade Plants case
- */
+
+// Handling IndexDB Upgrade Plants case
+
 function upgradeStores(ev){
     const db = ev.target.result
     db.createObjectStore("plantsSighting",{keyPath:"id", autoIncrement : true})
@@ -93,9 +94,7 @@ function upgradeStores(ev){
     console.log("Object:'Plants Sighting' created in upgradeStores" )
 }
 
-/**
- * Handling IndexDB Success case
- */
+// Handling IndexDB Success case
 function handleSuccess(ev){
     // initialising
     console.log("IndexDb Success!" )

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 
+
+// Plant sighting schema
 const plantSchema = new mongoose.Schema({
     nickname: {
         type: String,

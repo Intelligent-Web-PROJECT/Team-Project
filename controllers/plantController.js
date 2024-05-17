@@ -1,11 +1,12 @@
-const {listNewPlant, findAllPlants, findAllPlantsByUserId, addComment} = require("../models/mongodb");
+const {listNewPlant, findAllPlants, addComment} = require("../models/mongodb");
 const {getLocation} = require("../public/javascripts/location");
-const {sortItemsByDistance, calculateDistance} = require("../util/locationUtils");
+const {calculateDistance} = require("../util/locationUtils");
 
 function listPlant(req, res) {
     res.render('plant/list_plant',{})
 }
 
+//function to post a newly sighted plant
 async function postPlant(req, res) {
     try {
 
@@ -47,6 +48,7 @@ async function postPlant(req, res) {
     }
 }
 
+//Function to sync plants data to mongodb
 async function syncPlant(req, res) {
     try {
         let plants = JSON.parse(req.body.data)
@@ -82,8 +84,6 @@ async function syncPlant(req, res) {
         }
 
 
-        // console.log(plant)
-
         res.status(200).send(updatedPlants)
 
     } catch (error) {
@@ -91,10 +91,7 @@ async function syncPlant(req, res) {
     }
 }
 
-function getChats(req, res) {
-    res.render('plant/plant_detail', {user: req.user, auth: req.isLoggedIn})
-}
-
+// Function to add a message when a user sends it
 async function addMessage(req, res) {
     const plant = req.body.plant
     const nickname = req.body.nickname
@@ -102,6 +99,8 @@ async function addMessage(req, res) {
     await addComment(plant, nickname, text)
 }
 
+
+// Function to sync comments when a user comes online
 async function syncComments(req, res) {
     try {
         const comments = req.body;
@@ -121,6 +120,8 @@ async function syncComments(req, res) {
     }
 }
 
+
+// Function to get all the plants from the mongodb and dispaly it in the allPlants page
 async  function getAllPlants(req, res){
     try {
         let plants = await findAllPlants();
@@ -150,7 +151,6 @@ async  function getAllPlants(req, res){
 module.exports = {
     listPlant,
     postPlant,
-    getChats,
     getAllPlants,
     syncPlant,
     addMessage,

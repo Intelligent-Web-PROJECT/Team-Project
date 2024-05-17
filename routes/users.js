@@ -1,6 +1,5 @@
 var express = require('express');
-const {getLandingPage, getWelcomePage} = require("../controllers/landingPage");
-const {listPlant, postPlant, getAllPlants, getMyPlant, getChats, syncPlant, addMessage, syncComments} = require("../controllers/plantController");
+const {listPlant, postPlant, getAllPlants, syncPlant, addMessage, syncComments} = require("../controllers/plantController");
 const {upload} = require("../middlewares/multer");
 const {getPlantDetails, updatePlantName} = require("../controllers/detailsController");
 var router = express.Router();

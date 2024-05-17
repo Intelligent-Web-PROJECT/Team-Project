@@ -1,5 +1,4 @@
-
-
+// Messaging file used to send texts
 document.addEventListener('DOMContentLoaded', init);
 
 

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function (){
-
+    // plant listing file used to post a new plant
     const nicknameField = document.getElementById('nickname');
     let nickname = sessionStorage.getItem('nickName');
     if (nicknameField && nickname) {

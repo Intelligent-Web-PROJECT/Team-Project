@@ -2,7 +2,7 @@ window.onload = async function() {
     syncChats()
 }
 
-
+// function to update the plant name when the update button is clicked
 function updateIdentification() {
     const plantName = document.getElementById('plantName')
 
@@ -31,6 +31,8 @@ function updateIdentification() {
 }
 
 
+
+// function to sync chats when online
 function syncChats() {
     new Promise(function (resolve, reject) {
         Notification.requestPermission(function (result) {

@@ -10,23 +10,12 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     // Distance in kilometers
     return R * c;
 }
-
+// functions to calculate the users distance
 function deg2rad(deg) {
     return deg * (Math.PI/180);
 }
 
-function sortItemsByDistance(myLatitude, myLongitude, items) {
-    // Calculate distance for each item and add it as a new property
-    const itemsWithDistance = items.map(item => {
-        const distance = calculateDistance(myLatitude, myLongitude, item.location.latitude, item.location.longitude);
-        return { ...item, distance };
-    });
-
-    // Sort items based on distance
-    return itemsWithDistance.sort((a, b) => a.distance - b.distance);
-}
 
 module.exports = {
-    sortItemsByDistance,
     calculateDistance
 };

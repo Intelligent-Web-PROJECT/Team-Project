@@ -86,6 +86,8 @@ async function fetchPlantInfo(plantName) {
     });
 }
 
+
+// Update function to change the plant name
 async function updatePlantName(req, res) {
     const id = req.params.id
     const name = req.body.name

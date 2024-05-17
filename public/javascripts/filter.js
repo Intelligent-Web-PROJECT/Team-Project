@@ -1,3 +1,4 @@
+// Filters for filtering the plants
 document.addEventListener('DOMContentLoaded', function() {
     const filterSelect = document.getElementById('filter');
     const plantList = document.getElementById('plant-list');

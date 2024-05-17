@@ -2,6 +2,8 @@ const {Plant, Comment} = require('./models')
 
 const mongoose = require('mongoose')
 
+
+// mongo function to list a new plant
 async function listNewPlant(plant, photos){
     try {
         const { name, nickname, description, date, height, spread, flowers, leaves, fruits, sunExposure, flowerColour, longitude, latitude } = plant;
@@ -33,20 +35,14 @@ async function listNewPlant(plant, photos){
     }
 }
 
-async function syncPlants(plants) {
-    return await Plant.insertMany(plants)
-}
-
-// Function to find all plants by a specific user ID
-async function findAllPlantsByUserId(userId) {
-    return Plant.find({ user: userId })
-}
 
 // Function to find all plants in the database
 async function findAllPlants() {
     return Plant.find()
 }
 
+
+// Function to add comment to the mongodb
 async function addComment(plantId, userId, commentText) {
     try {
         const existingComment = await Comment.findOne({plant: plantId})
@@ -73,10 +69,14 @@ async function addComment(plantId, userId, commentText) {
     }
 }
 
+
+// Function to get comments from the mongodb
 async function getComments(plantId) {
     return await Comment.findOne({plant: plantId})
 }
 
+
+//function to update the plant name
 async function updatePlant(plantId, name) {
     const filter = {
         _id: plantId
@@ -92,10 +92,8 @@ async function updatePlant(plantId, name) {
 
 module.exports = {
     listNewPlant,
-    findAllPlantsByUserId,
     findAllPlants,
     addComment,
     getComments,
-    syncPlants,
     updatePlant
 };

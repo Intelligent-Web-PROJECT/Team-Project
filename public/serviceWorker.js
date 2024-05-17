@@ -18,7 +18,9 @@ self.addEventListener('install', event => {
             "images/leaf-logo.svg",
             "images/placeholder.jpg",
             "images/plant-community.jpg",
-            "images/plant-snap.png"]);
+            "images/plant-snap.png",
+            "images/banner.png"
+        ]);
     }));
 });
 
@@ -46,7 +48,7 @@ async function networkThenCache(event) {
             console.log('Serving From Cache: ' + event.request.url);
             return cachedResponse;
         }
-        return new Response('You are currently offline! Please check your Internet connection');
+        return new Response('You are currently offline! To proceed please check your internet connection');
     }
 }
 

@@ -14,6 +14,7 @@ const connectionString = `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST
 
 let connected = false
 
+// Used to connect to the mongodb database
 
 const connectToDB = async () => {
     try {
