@@ -33,6 +33,27 @@ a:hover{
   transform: scale(1.03); /* Enlarge the card by 5% when hovered */
 }
 
+.authBtn {
+  width: 100%;
+  border: none;
+  background: none;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #198754;
+  transition: color 0.3s, background-color 0.3s;
+}
+
+.authBtn.active {
+  background-color: #198754;
+  color: #fff;
+}
+
+.authBtn:hover {
+  background-color: #13623f;
+  color: #fff;
+}
+
 .logo {
   width: 50px;
   height: auto;

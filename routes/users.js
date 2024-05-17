@@ -3,6 +3,7 @@ const {getLandingPage, getWelcomePage} = require("../controllers/landingPage");
 const {listPlant, postPlant, getAllPlants, getMyPlant, getChats, syncPlant, addMessage} = require("../controllers/plantController");
 const {upload} = require("../middlewares/multer");
 const {getPlantDetails} = require("../controllers/detailsController");
+const {registerUser, checkNickname, loginUser} = require("../public/javascripts/RegisterUser");
 var router = express.Router();
 
 /* GET users listing. */
@@ -26,5 +27,8 @@ router.get('/plants/:plantId', getPlantDetails);
 
 
 router.post('/addMessage',upload.none(), addMessage)
+
+router.post('/register', registerUser);
+router.post('/login', loginUser);
 
 module.exports = router;
