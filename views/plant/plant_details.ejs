@@ -2,8 +2,6 @@
 <%- include("../components/navbar") %>
 
 <script src="/javascripts/indexDb.js"></script>
-<script src="/javascripts/message.js"></script>
-<script src="/javascripts/details.js"></script>
 <!-- Banner Start -->
 <div class="landing-title text-center py-4">
     <h1>Plant Details</h1>
@@ -158,7 +156,7 @@
                     <div class="mb-3">
                         <label for="plantName" class="label">Plant Name</label>
                         <input type="text" class="form-control" id="plantName" value="<%= plant.name %>" required>
-                        <button type="submit" class="btn btn-success" id="updateBtn">Confirm Identification</button>
+                        <button type="submit" class="btn btn-success" id="updateBtn" onclick="updateIdentification()">Confirm Identification</button>
                     </div>
             </div>
         </div>
@@ -180,6 +178,10 @@
         ownerButton.classList.remove('d-none'); // Make visible
     }
 </script>
+
+
+<script src="/javascripts/message.js"></script>
+<script src="/javascripts/details.js"></script>
 
 
 

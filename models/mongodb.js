@@ -77,6 +77,18 @@ async function getComments(plantId) {
     return await Comment.findOne({plant: plantId})
 }
 
+async function updatePlant(plantId, name) {
+    const filter = {
+        _id: plantId
+    }
+    const update = {
+        $set: {
+            name: name
+        }
+    }
+    return Plant.updateOne(filter, update);
+}
+
 
 module.exports = {
     listNewPlant,
@@ -84,5 +96,6 @@ module.exports = {
     findAllPlants,
     addComment,
     getComments,
-    syncPlants
+    syncPlants,
+    updatePlant
 };
